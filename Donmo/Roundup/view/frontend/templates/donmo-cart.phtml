@@ -1,0 +1,37 @@
+<?php
+/** @var $block Template */
+/** @var $config Config */
+/** @var $viewModel \Donmo\Roundup\ViewModel\Cart\Donmo */
+
+use Magento\Framework\View\Element\Template;
+use Donmo\Roundup\Model\Config;
+
+$viewModel = $block->getViewModel();
+$isAvailable = $viewModel->getIsAvailable();
+$donmoConfig = $viewModel->getDonmoConfig();
+$style = "
+width: 70%;
+margin: 15px 5px;
+"
+?>
+<?php if($isAvailable):?>
+<div id="donmo-component" style="<?= $style ?>" data-bind="scope:'donmo-component'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "donmo-component": {
+                            "component": "Donmo_Roundup/js/view/cart/donmo-block",
+                            "donmoConfig": <?= $donmoConfig ?>
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</div>
+<?php endif?>
+
+

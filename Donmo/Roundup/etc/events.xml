@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <!--  Add donation to order before submit  -->
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="donmodonation" instance="Donmo\Roundup\Observer\AddDonationToOrder" />
+    </event>
+
+    <!--  Create donation on order success  -->
+
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="donmo_place_order_checkout_success_observer" instance="Donmo\Roundup\Observer\PlaceOrderWithDonation" />
+    </event>
+
+    <!--  Remove donation on order cancellation  -->
+
+    <event name="order_cancel_after">
+        <observer name="donmo_cancel_order" instance="Donmo\Roundup\Observer\RemoveDonationWithOrder" />
+    </event>
+</config>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+  ~ /**
+  ~  * Copyright © Magento, Inc. All rights reserved.
+  ~  * See COPYING.txt for license details.
+  ~  */
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="https://static.donmo.org/integration.min.js" src_type="url"/>
+    </head>
+    <body>
+        <referenceBlock name="checkout.cart.totals">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="block-totals" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="donmodonation" xsi:type="array">
+                                    <item name="component"  xsi:type="string">Donmo_Roundup/js/view/cart/totals/donmodonation</item>
+                                    <item name="sortOrder" xsi:type="string">40</item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceContainer name="checkout.cart.container">
+            <container name="cart.donmo" label="Cart Donmo Container" after="-">
+                <block name="donmo-cart-block" template="Donmo_Roundup::donmo-cart.phtml">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Donmo\Roundup\ViewModel\Cart\Donmo</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

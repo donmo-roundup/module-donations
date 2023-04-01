@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <donmo_roundup>
+            <donmo>
+                <is_active>0</is_active>
+                <donmo_mode>test</donmo_mode>
+                <donmo_test_sk backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <donmo_live_sk backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <is_cron_enabled>0</is_cron_enabled>
+                <donation_label>Донат для ЗСУ</donation_label>
+                <integration_title>Округліть для ЗСУ!</integration_title>
+                <donate_message>Округлити</donate_message>
+                <thank_message>Дякуємо за донат! Слава Україні!</thank_message>
+                <error_message>Щось сталось, але спробуйте ще раз!</error_message>
+                <currency>UAH</currency>
+            </donmo>
+        </donmo_roundup>
+    </default>
+</config>

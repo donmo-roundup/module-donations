@@ -1,0 +1,10 @@
+<!-- ko if: (getDonationAmount() !== 0)-->
+<tr class="totals donmodonation excl">
+    <th class="mark" colspan="1" scope="row" data-bind="text: getDonationLabel()"
+        style="font-weight: bold;">
+    </th>
+    <td class="amount">
+        <span class="price" data-bind="text: getDonationAmount()"></span>
+    </td>
+</tr>
+<!-- /ko -->

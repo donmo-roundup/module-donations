@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="donmo_roundup" translate="label" type="text" sortOrder="415" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Donmo Roundup</label>
+            <tab>sales</tab>
+            <resource>Magento_Sales::donmo_roundup</resource>
+            <group id="donmo" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="about" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Configuration</label>
+                    <comment><![CDATA[Для підтримки, звертайтесь на <a href="mailto:info@donmo.org">info@donmo.org</a>.]]></comment>
+                </group>
+
+
+                    <field id="is_active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Активувати інтеграцію</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+
+                    <field id="is_cron_enabled" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Cron Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+
+                    <field id="donmo_mode" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Mode</label>
+                        <comment><![CDATA[Змініть це значення на Live лиш коли будете готові приймати донати]]></comment>
+                        <source_model>Donmo\Roundup\Model\Adminhtml\Source\Mode</source_model>
+                    </field>
+
+                    <field id="donmo_test_pk" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Публічний ключ тестування (pk_test)</label>
+                        <depends>
+                            <field id="donmo_mode">test</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                    </field>
+
+                    <field id="donmo_test_sk" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Секретний ключ тестування (sk_test)</label>
+                        <depends>
+                            <field id="donmo_mode">test</field>
+                        </depends>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>required-entry</validate>
+                    </field>
+
+                    <field id="donmo_live_pk" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Публічний ключ продакшн (pk_)</label>
+                        <depends>
+                            <field id="donmo_mode">live</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                    </field>
+
+                    <field id="donmo_live_sk" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Секретний ключ продакшн (sk_)</label>
+                        <depends>
+                            <field id="donmo_mode">live</field>
+                        </depends>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>required-entry</validate>
+                    </field>
+
+                    <field id="integration_title" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Заголовок інтеграції</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <validate>validate-no-empty</validate>
+                    </field>
+
+                    <field id="donate_message" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Меседж задонатити (кнопка)</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <validate>validate-no-empty</validate>
+                    </field>
+
+                    <field id="thank_message" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Меседж подяки</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <validate>validate-no-empty</validate>
+                    </field>
+                    <field id="donation_label" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Напис в кошику</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <validate>validate-no-empty</validate>
+                    </field>
+
+                    <field id="error_message" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Меседж помилки</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <validate>validate-no-empty</validate>
+                    </field>
+            </group>
+
+        </section>
+    </system>
+</config>

@@ -1,0 +1,21 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!--   Reports Table Grid Collection and DataProvider-->
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="donmo_report_data_source" xsi:type="string">Donmo\Roundup\Model\Report\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Donmo\Roundup\Model\ResourceModel\DonmoReport\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">donmo_donation</argument>
+            <argument name="eventPrefix" xsi:type="string">donmo_report_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">report_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Donmo\Roundup\Model\Donmo\ResourceModel\Donation</argument>
+        </arguments>
+    </type>
+</config>
