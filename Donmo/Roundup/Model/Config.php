@@ -41,11 +41,19 @@ class Config
         return $this->scopeConfig->getValue("donmo_roundup/donmo/is_cron_enabled");
     }
 
+    public function getLanguageCode() {
+        return $this->scopeConfig->getValue("donmo_roundup/donmo/language");
+    }
+
+    public function getCurrencySymbol() {
+        return $this->scopeConfig->getValue("donmo_roundup/donmo/currency");
+    }
+
     public function getIntegrationTitle() {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/integration_title");
     }
 
-    public function getDonateMessage() {
+    public function getRoundupMessage() {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/donate_message");
     }
 

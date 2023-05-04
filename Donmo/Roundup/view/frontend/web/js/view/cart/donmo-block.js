@@ -47,10 +47,12 @@ define([
             this.donmo.build({
                 publicKey: this.donmoConfig.publicKey,
                 isBackendBased: this.donmoConfig.isBackendBased,
+                language: this.donmoConfig.language,
+                currency: this.donmoConfig.currency,
                 width: '100%',
                 orderId: quote.getQuoteId(),
                 integrationTitle: this.donmoConfig.integrationTitle,
-                donateMessage: this.donmoConfig.donateMessage,
+                roundupMessage: this.donmoConfig.roundupMessage,
                 thankMessage: this.donmoConfig.thankMessage,
                 errorMessage: this.donmoConfig.errorMessage,
                 addDonationAction: this.addDonation,
