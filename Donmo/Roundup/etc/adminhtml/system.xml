@@ -39,7 +39,7 @@
                         <depends>
                             <field id="donmo_mode">test</field>
                         </depends>
-                        <validate>required-entry</validate>
+                        <validate>validate-pk-test-key</validate>
                     </field>
 
                     <field id="donmo_test_sk" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -48,7 +48,7 @@
                             <field id="donmo_mode">test</field>
                         </depends>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <validate>required-entry</validate>
+                        <validate>validate-sk-test-key</validate>
                     </field>
 
                     <field id="donmo_live_pk" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -56,7 +56,7 @@
                         <depends>
                             <field id="donmo_mode">live</field>
                         </depends>
-                        <validate>required-entry</validate>
+                        <validate>validate-pk-live-key</validate>
                     </field>
 
                     <field id="donmo_live_sk" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -65,7 +65,7 @@
                             <field id="donmo_mode">live</field>
                         </depends>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <validate>required-entry</validate>
+                        <validate>validate-sk-live-key</validate>
                     </field>
 
                     <field id="integration_title" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
