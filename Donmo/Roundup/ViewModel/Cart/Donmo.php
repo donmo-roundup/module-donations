@@ -5,16 +5,18 @@ use Magento\Framework\App\State;
 use Donmo\Roundup\Model\Config;
 use \Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Donmo\Roundup\Helper\Locale;
 
 class Donmo implements ArgumentInterface
 {
-
+    private Locale $locale;
     private State $appState;
     private mixed $mode;
     private Config $config;
     private Json $json;
-    public function __construct(State $appState, Config $config, Json $json)
+    public function __construct(State $appState, Config $config, Json $json, Locale $locale)
     {
+        $this->locale = $locale;
         $this->appState = $appState;
         $this->config = $config;
         $this->mode = $this->config->getCurrentMode();
@@ -37,8 +39,10 @@ class Donmo implements ArgumentInterface
         $this->json->serialize([
             'publicKey' => $this->config->getPublicKey($this->mode),
             'isBackendBased' => $this->config->getIsBackendBased(),
+            'language' => $this->locale->getLanguageCode(),
+            'currency' => $this->locale->getCurrencySymbol(),
             'integrationTitle' => $this->config->getIntegrationTitle(),
-            'donateMessage' => $this->config->getDonateMessage(),
+            'roundupMessage' => $this->config->getRoundupMessage(),
             'thankMessage' => $this->config->getThankMessage(),
             'errorMessage' => $this->config->getErrorMessage()
         ]);

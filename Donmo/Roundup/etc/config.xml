@@ -19,7 +19,6 @@
                 <donate_message>Округлити</donate_message>
                 <thank_message>Дякуємо за донат! Слава Україні!</thank_message>
                 <error_message>Щось сталось, але спробуйте ще раз!</error_message>
-                <currency>UAH</currency>
             </donmo>
         </donmo_roundup>
     </default>
