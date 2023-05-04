@@ -2,7 +2,7 @@
 
 namespace Donmo\Roundup\Cron;
 use Magento\Framework\HTTP\Client\Curl;
-use Psr\Log\LoggerInterface;
+
 use Donmo\Roundup\Model\Donmo\ResourceModel\Donation\CollectionFactory;
 use Donmo\Roundup\Model\Donmo\DonationFactory;
 use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
@@ -14,6 +14,8 @@ use \Magento\Framework\Model\ResourceModel\IteratorFactory;
 
 use Donmo\Roundup\Model\Config as DonmoConfig;
 use Donmo\Roundup\lib\Donmo as Donmo;
+
+use Donmo\Roundup\Logger\Logger;
 class ProcessDonations
 {
     private $connection;
@@ -22,7 +24,7 @@ class ProcessDonations
     private DonmoConfig $donmoConfig;
     private DonationResource $donationResource;
     private DonationFactory $donationFactory;
-    private LoggerInterface $logger;
+    private Logger $logger;
     private ScopeConfigInterface $scopeConfig;
     private Curl $curl;
     private Json $json;
@@ -36,7 +38,7 @@ class ProcessDonations
         CollectionFactory $collectionFactory,
         DonationFactory  $donationFactory,
         DonationResource $donationResource,
-        LoggerInterface $logger,
+        Logger $logger,
         ScopeConfigInterface $scopeConfig,
         Curl $curl,
         Json $json,
@@ -72,7 +74,6 @@ class ProcessDonations
                  'donationAmount' => (float) $result['row']['donation_amount'],
                  'createdAt' => $result['row']['created_at'],
                  'orderId' => $result['row']['order_id'],
-                 'mode' => $result['row']['mode'],
              ];
 
              $this->payload[] = $donation_data;
@@ -101,8 +102,7 @@ class ProcessDonations
                     $this->logger->error("Recording donations error (Magento DB): \n" . $e);
                 }
             } else {
-                $message = $this->json->unserialize($result)['message'];
-                $this->logger->error("Recording donations error (API): \n" . $message);
+                $this->logger->error("Recording donations error (API): \n" . $result);
             }
         }
     }
