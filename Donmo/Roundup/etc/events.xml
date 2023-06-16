@@ -16,12 +16,18 @@
     <!--  Create donation on order success  -->
 
     <event name="checkout_onepage_controller_success_action">
-        <observer name="donmo_place_order_checkout_success_observer" instance="Donmo\Roundup\Observer\PlaceOrderWithDonation" />
+        <observer name="donmo_place_order_checkout_success_observer" instance="Donmo\Roundup\Observer\ConfirmDonationOnOrderComplete" />
     </event>
 
     <!--  Remove donation on order cancellation  -->
 
     <event name="order_cancel_after">
         <observer name="donmo_cancel_order" instance="Donmo\Roundup\Observer\RemoveDonationWithOrder" />
+    </event>
+
+    <!--  Confirm donation on order complete  -->
+
+    <event name="sales_order_save_after">
+        <observer name="donmo_complete_order" instance="Donmo\Roundup\Observer\ConfirmDonationOnOrderComplete" />
     </event>
 </config>

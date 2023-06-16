@@ -46,10 +46,9 @@ define([
         buildIntegration: function () {
             this.donmo.build({
                 publicKey: this.donmoConfig.publicKey,
-                isBackendBased: this.donmoConfig.isBackendBased,
+                isBackendBased: true,
                 width: '100%',
                 language: this.donmoConfig.language,
-                currency: this.donmoConfig.currency,
                 orderId: quote.getQuoteId(),
                 integrationTitle: this.donmoConfig.integrationTitle,
                 roundupMessage: this.donmoConfig.roundupMessage,

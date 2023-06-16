@@ -42,9 +42,7 @@ class DonmoConfig implements LayoutProcessorInterface
             ['payment']['children']['afterMethods']
             ['children']['donmo-block']['donmoConfig'] = [
                 'publicKey' => $this->config->getPublicKey($this->mode),
-                'isBackendBased' => $this->config->getIsBackendBased(),
                 'language' => $this->locale->getLanguageCode(),
-                'currency' => $this->locale->getCurrencySymbol(),
                 'integrationTitle' => $this->config->getIntegrationTitle(),
                 'roundupMessage' => $this->config->getRoundupMessage(),
                 'thankMessage' => $this->config->getThankMessage(),

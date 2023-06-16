@@ -16,7 +16,7 @@ use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
 use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
 
 use Psr\Log\LoggerInterface;
-class PlaceOrderWithDonation implements ObserverInterface
+class ConfirmDonationOnOrderComplete implements ObserverInterface
 {
     private DonmoConfig $donmoConfig;
     private DonationFactory $donationFactory;

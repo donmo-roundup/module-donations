@@ -13,7 +13,6 @@
                 <donmo_mode>test</donmo_mode>
                 <donmo_test_sk backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <donmo_live_sk backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <is_cron_enabled>0</is_cron_enabled>
                 <donation_label>Донат для ЗСУ</donation_label>
                 <integration_title>Округліть для ЗСУ!</integration_title>
                 <donate_message>Округлити</donate_message>
