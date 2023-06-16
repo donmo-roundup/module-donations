@@ -38,9 +38,7 @@ class Donmo implements ArgumentInterface
         return
         $this->json->serialize([
             'publicKey' => $this->config->getPublicKey($this->mode),
-            'isBackendBased' => $this->config->getIsBackendBased(),
             'language' => $this->locale->getLanguageCode(),
-            'currency' => $this->locale->getCurrencySymbol(),
             'integrationTitle' => $this->config->getIntegrationTitle(),
             'roundupMessage' => $this->config->getRoundupMessage(),
             'thankMessage' => $this->config->getThankMessage(),

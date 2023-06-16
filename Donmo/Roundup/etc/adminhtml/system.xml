@@ -23,11 +23,6 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
 
-                    <field id="is_cron_enabled" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Cron Enabled</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-
                     <field id="donmo_mode" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Mode</label>
                         <comment><![CDATA[Змініть це значення на Live лиш коли будете готові приймати донати]]></comment>
@@ -48,7 +43,6 @@
                             <field id="donmo_mode">test</field>
                         </depends>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <validate>validate-sk-test-key</validate>
                     </field>
 
                     <field id="donmo_live_pk" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -65,7 +59,6 @@
                             <field id="donmo_mode">live</field>
                         </depends>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <validate>validate-sk-live-key</validate>
                     </field>
 
                     <field id="integration_title" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">

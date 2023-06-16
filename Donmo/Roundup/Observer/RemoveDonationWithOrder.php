@@ -2,11 +2,11 @@
 
 namespace Donmo\Roundup\Observer;
 
+use Donmo\Roundup\Logger\Logger;
 use Donmo\Roundup\Model\Config as DonmoConfig;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Psr\Log\LoggerInterface;
 
 use Zend_Http_Client;
 use Magento\Framework\HTTP\ZendClient;
@@ -21,14 +21,14 @@ use Donmo\Roundup\lib\Donmo as Donmo;
 class RemoveDonationWithOrder implements ObserverInterface
 {
     private ZendClient $client;
-    private LoggerInterface $logger;
+    private Logger $logger;
     private DonmoConfig $config;
     private DonationFactory $donationFactory;
     private DonationResource $donationResource;
 
     public function __construct(
         ZendClientFactory $httpClientFactory,
-        LoggerInterface $logger,
+        Logger $logger,
         DonmoConfig $config,
         DonationFactory  $donationFactory,
         DonationResource $donationResource,
@@ -47,7 +47,7 @@ class RemoveDonationWithOrder implements ObserverInterface
         $order = $event->getOrder();
 
         if($order->getDonmodonation() > 0) {
-            $orderId = $order->getId();
+            $orderId = $order->getQuoteId();
             $donationModel = $this->donationFactory->create();
             $this->donationResource->load($donationModel, $orderId, 'order_id');
             $donationMode = $donationModel->getData('mode');

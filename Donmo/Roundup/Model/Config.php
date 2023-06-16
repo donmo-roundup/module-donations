@@ -37,16 +37,8 @@ class Config
         return $this->scopeConfig->getValue("donmo_roundup/donmo/is_active");
     }
 
-    public function getIsBackendBased() {
-        return $this->scopeConfig->getValue("donmo_roundup/donmo/is_cron_enabled");
-    }
-
     public function getLanguageCode() {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/language");
-    }
-
-    public function getCurrencySymbol() {
-        return $this->scopeConfig->getValue("donmo_roundup/donmo/currency");
     }
 
     public function getIntegrationTitle() {
