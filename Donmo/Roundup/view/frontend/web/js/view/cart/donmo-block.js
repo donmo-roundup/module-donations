@@ -11,8 +11,6 @@ define([
             template: 'Donmo_Roundup/checkout/summary/donmo-block',
         },
 
-        donmo: new DonmoRoundup(),
-
         grandTotal: ko.observable(quote.totals()['grand_total']),
 
         addDonation: ({ donationAmount }) => {
@@ -42,34 +40,30 @@ define([
                 () => getTotalsAction([])).then(() => console.log('remove donation completed'))
         },
 
-
-        buildIntegration: function () {
-            this.donmo.build({
-                publicKey: this.donmoConfig.publicKey,
-                isBackendBased: true,
-                language: this.donmoConfig.language,
-                width: '100%',
-                orderId: quote.getQuoteId(),
-                integrationTitle: this.donmoConfig.integrationTitle,
-                roundupMessage: this.donmoConfig.roundupMessage,
-                thankMessage: this.donmoConfig.thankMessage,
-                errorMessage: this.donmoConfig.errorMessage,
-                addDonationAction: this.addDonation,
-                removeDonationAction: this.removeDonation,
-                getExistingDonation: () => parseFloat(totals.getSegment('donmodonation')?.value),
-                getGrandTotal: () => quote.totals()['grand_total'],
-            })
-        },
-
-        insertIntegration: function () {
-            console.log('inserting integration')
-            this.buildIntegration()
+        insertIntegration: function (){
+            const donmo = DonmoRoundup(
+                {
+                    publicKey: this.donmoConfig.publicKey,
+                    isBackendBased: true,
+                    language: this.donmoConfig.language,
+                    orderId: quote.getQuoteId(),
+                    integrationTitle: this.donmoConfig.integrationTitle,
+                    roundupMessage: this.donmoConfig.roundupMessage,
+                    thankMessage: this.donmoConfig.thankMessage,
+                    errorMessage: this.donmoConfig.errorMessage,
+                    addDonationAction: this.addDonation,
+                    removeDonationAction: this.removeDonation,
+                    getExistingDonation: () => parseFloat(totals.getSegment('donmodonation')?.value),
+                    getGrandTotal: () => quote.totals()['grand_total'],
+                }
+            )
+            donmo.build()
 
             // on totals change, trigger grandTotal observable with new value
             quote.totals.subscribe((data) => this.grandTotal(data['grand_total']))
 
             // on grandTotal change, refresh donmo integration
-            this.grandTotal.subscribe(() => this.donmo.refresh())
+            this.grandTotal.subscribe(() => donmo.refresh())
         }
 
     })
