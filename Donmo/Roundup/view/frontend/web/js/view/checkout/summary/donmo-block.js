@@ -11,11 +11,8 @@ define([
             template: 'Donmo_Roundup/checkout/summary/donmo-block',
         },
 
-        donmo: new DonmoRoundup(),
-
         grandTotal: ko.observable(quote.totals()['grand_total']),
-
-        addDonation: ({ donationAmount }) => {
+        addDonation:  ({ donationAmount }) => {
             const path = url.build('donmo/roundup/create');
 
             fetch(path, {
@@ -29,7 +26,6 @@ define([
                 })
             }).then(response => response.json()).then(() => getPaymentInformation())
         },
-
         removeDonation: () => {
             const path = url.build('donmo/roundup/remove');
 
@@ -42,33 +38,31 @@ define([
                 () => getPaymentInformation()).then(() => console.log('remove donation completed'))
         },
 
+        insertIntegration: function (){
+            const donmo = DonmoRoundup(
+                {
+                    publicKey: this.donmoConfig.publicKey,
+                    isBackendBased: true,
+                    language: this.donmoConfig.language,
+                    orderId: quote.getQuoteId(),
+                    integrationTitle: this.donmoConfig.integrationTitle,
+                    roundupMessage: this.donmoConfig.roundupMessage,
+                    thankMessage: this.donmoConfig.thankMessage,
+                    errorMessage: this.donmoConfig.errorMessage,
+                    addDonationAction: this.addDonation,
+                    removeDonationAction: this.removeDonation,
+                    getExistingDonation: () => parseFloat(totals.getSegment('donmodonation')?.value),
+                    getGrandTotal: () => quote.totals()['grand_total'],
+                }
+            )
 
-        buildIntegration: function () {
-            this.donmo.build({
-                publicKey: this.donmoConfig.publicKey,
-                isBackendBased: true,
-                width: '100%',
-                language: this.donmoConfig.language,
-                orderId: quote.getQuoteId(),
-                integrationTitle: this.donmoConfig.integrationTitle,
-                roundupMessage: this.donmoConfig.roundupMessage,
-                thankMessage: this.donmoConfig.thankMessage,
-                errorMessage: this.donmoConfig.errorMessage,
-                addDonationAction: this.addDonation,
-                removeDonationAction: this.removeDonation,
-                getExistingDonation: () => parseFloat(totals.getSegment('donmodonation')?.value),
-                getGrandTotal: () => quote.totals()['grand_total'],
-            })
-        },
-
-        insertIntegration: function () {
-            this.buildIntegration()
+            donmo.build()
 
             // on totals change, trigger grandTotal observable with new value
             quote.totals.subscribe((data) => this.grandTotal(data['grand_total']))
 
             // on grandTotal change, refresh donmo integration
-            this.grandTotal.subscribe(() => this.donmo.refresh())
+            this.grandTotal.subscribe(() => donmo.refresh())
         }
 
     })
