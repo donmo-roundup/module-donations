@@ -10,7 +10,7 @@
         </arguments>
     </type>
 
-    <type name="Donmo\Roundup\Model\ResourceModel\DonmoReport\Grid\Collection">
+    <type name="Donmo\Roundup\Model\ResourceModel\Report\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">donmo_donation</argument>
             <argument name="eventPrefix" xsi:type="string">donmo_report_grid_collection</argument>

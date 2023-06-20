@@ -86,7 +86,7 @@
             </settings>
         </column>
 
-        <column name="order_id" sortOrder="21">
+        <column name="masked_quote_id" sortOrder="21">
             <settings>
                 <filter>textRange</filter>
                 <sorting>asc</sorting>

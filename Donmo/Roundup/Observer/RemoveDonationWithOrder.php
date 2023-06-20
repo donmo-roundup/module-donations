@@ -18,6 +18,8 @@ use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
 
 use Donmo\Roundup\lib\Donmo as Donmo;
 
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+
 class RemoveDonationWithOrder implements ObserverInterface
 {
     private ZendClient $client;
@@ -25,6 +27,7 @@ class RemoveDonationWithOrder implements ObserverInterface
     private DonmoConfig $config;
     private DonationFactory $donationFactory;
     private DonationResource $donationResource;
+    private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId;
 
     public function __construct(
         ZendClientFactory $httpClientFactory,
@@ -32,6 +35,7 @@ class RemoveDonationWithOrder implements ObserverInterface
         DonmoConfig $config,
         DonationFactory  $donationFactory,
         DonationResource $donationResource,
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
     )
     {
         $this->client = $httpClientFactory->create();
@@ -39,26 +43,27 @@ class RemoveDonationWithOrder implements ObserverInterface
         $this->config = $config;
         $this->donationFactory = $donationFactory;
         $this->donationResource = $donationResource;
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
     public function execute(Observer $observer)
     {
-        $event = $observer->getEvent();
-        $order = $event->getOrder();
+        $order = $observer->getEvent()->getOrder();
 
         if($order->getDonmodonation() > 0) {
-            $orderId = $order->getQuoteId();
+            $quoteId = $order->getQuoteId();
+            $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
+
             $donationModel = $this->donationFactory->create();
-            $this->donationResource->load($donationModel, $orderId, 'order_id');
+            $this->donationResource->load($donationModel, $maskedId, 'masked_quote_id');
             $donationMode = $donationModel->getData('mode');
 
             // get secret key for donation mode (live vs test)
             $sk = $this->config->getSecretKey($donationMode);
 
-            $url = Donmo::$apiBase . "/donations/{$orderId}";
+            $url = Donmo::$apiBase . "/donations/{$maskedId}";
 
             try{
-
                 // Make request to Donmo API
                 $this->client->setUri($url);
                 $this->client->setMethod(Zend_Http_Client::DELETE);
