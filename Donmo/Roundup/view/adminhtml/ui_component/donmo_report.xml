@@ -67,7 +67,7 @@
             </settings>
         </selectionsColumn>
 
-        <column name="donation_id">
+        <column name="donation_id" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
@@ -77,7 +77,7 @@
             </argument>
         </column>
 
-        <column name="donation_amount" sortOrder="20">
+        <column name="donation_amount" sortOrder="21">
             <settings>
                 <label translate="true">
                     Donation Amount
@@ -86,7 +86,7 @@
             </settings>
         </column>
 
-        <column name="masked_quote_id" sortOrder="21">
+        <column name="order_id" sortOrder="22">
             <settings>
                 <filter>textRange</filter>
                 <sorting>asc</sorting>
@@ -94,9 +94,17 @@
             </settings>
         </column>
 
+        <column name="masked_quote_id" sortOrder="23">
+            <settings>
+                <filter>textRange</filter>
+                <sorting>asc</sorting>
+                <label>Masked Quote Id</label>
+            </settings>
+        </column>
+
         <column name="donation_amount"
                 class="Magento\Sales\Ui\Component\Listing\Column\Price"
-                sortOrder="22">
+                sortOrder="24">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
@@ -107,7 +115,7 @@
         <column name="created_at"
                 class="Magento\Ui\Component\Listing\Columns\Date"
                 component="Magento_Ui/js/grid/columns/date"
-                sortOrder="23">
+                sortOrder="25">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
@@ -118,7 +126,7 @@
         <column name="updated_at"
                 class="Magento\Ui\Component\Listing\Columns\Date"
                 component="Magento_Ui/js/grid/columns/date"
-                sortOrder="24"
+                sortOrder="26"
         >
             <settings>
                 <filter>text</filter>
@@ -129,7 +137,7 @@
 
         <column name="mode"
                 component="Magento_Ui/js/grid/columns/select"
-                sortOrder="25">
+                sortOrder="27">
             <settings>
                 <options class="Donmo\Roundup\Ui\Component\Listing\Column\Mode"/>
                 <filter>select</filter>
@@ -141,7 +149,7 @@
         <column
             name="status"
             component="Magento_Ui/js/grid/columns/select"
-            sortOrder="26"
+            sortOrder="28"
         >
             <settings>
                 <options class="Donmo\Roundup\Ui\Component\Listing\Column\Status"/>

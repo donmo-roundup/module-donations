@@ -51,6 +51,7 @@ class CreateDonation implements ObserverInterface
         $order = $observer->getEvent()->getOrder();
         if($order->getState() == 'new') {
             if ($order->getDonmodonation() > 0) {
+                $orderId = $order->getId();
                 $quoteId = $order->getQuoteId();
                 $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
                 $currentMode = $this->donmoConfig->getCurrentMode();
@@ -63,6 +64,7 @@ class CreateDonation implements ObserverInterface
 
                 $donationModel
                     ->setMaskedQuoteId($maskedId)
+                    ->setOrderId($orderId)
                     ->setDonationAmount($order->getDonmodonation())
                     ->setCreatedAt($createdAt)
                     ->setStatus(DonationModel::STATUS_PENDING)

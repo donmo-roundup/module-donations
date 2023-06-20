@@ -17,9 +17,13 @@
 
         <column xsi:type="varchar" name="masked_quote_id" nullable="true" length="32"  comment="Masked Quote ID"/>
 
+        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Order Id"/>
+
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
 
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
+
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="donation_id"/>
@@ -31,6 +35,10 @@
 
         <constraint xsi:type="foreign" referenceId="DONMO_DONATION_MASKED_QUOTE_ID_QUOTE_ID_MASK_MASKED_ID" table="donmo_donation"
                     column="masked_quote_id" referenceTable="quote_id_mask" referenceColumn="masked_id" onDelete="NO ACTION"/>
+
+        <constraint xsi:type="foreign" referenceId="DONMO_DONATION_ORDER_ID_SALES_ORDER_ENTITY_ID" table="pennies_donation"
+                    column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+
     </table>
 
     <!--    Sales_Order Table-->
