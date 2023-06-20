@@ -73,7 +73,7 @@ class ProcessDonations
              $donation_data = [
                  'donationAmount' => (float) $result['row']['donation_amount'],
                  'createdAt' => $result['row']['created_at'],
-                 'orderId' => $result['row']['order_id'],
+                 'orderId' => $result['row']['masked_quote_id'],
              ];
 
              $this->payload[] = $donation_data;

@@ -6,29 +6,42 @@ namespace Donmo\Roundup\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+use Donmo\Roundup\Model\Config as DonmoConfig;
+
+use Magento\Framework\Intl\DateTimeFactory;
+
+
 use Donmo\Roundup\Model\Donmo\DonationFactory;
 use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
 use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
 
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Psr\Log\LoggerInterface;
-class ConfirmDonationOnOrderComplete implements ObserverInterface
+class CreateDonation implements ObserverInterface
 {
+    private DonmoConfig $donmoConfig;
+    private DonationFactory $donationFactory;
     private DonationResource $donationResource;
+
+    private DateTimeFactory $dateTimeFactory;
+
     private LoggerInterface $logger;
     private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId;
 
     public function __construct(
-        LoggerInterface $logger,
         DonationFactory  $donationFactory,
         DonationResource $donationResource,
+        DateTimeFactory $dateTimeFactory,
+        LoggerInterface $logger,
+        DonmoConfig $config,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
     )
     {
-        $this->logger = $logger;
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
         $this->donationFactory = $donationFactory;
         $this->donationResource = $donationResource;
+        $this->dateTimeFactory = $dateTimeFactory;
+        $this->logger = $logger;
+        $this->donmoConfig = $config;
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
@@ -36,19 +49,24 @@ class ConfirmDonationOnOrderComplete implements ObserverInterface
     public function execute(Observer $observer)
     {
         $order = $observer->getEvent()->getOrder();
-        if($order->getState() == 'complete') {
+        if($order->getState() == 'new') {
             if ($order->getDonmodonation() > 0) {
-
                 $quoteId = $order->getQuoteId();
                 $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
+                $currentMode = $this->donmoConfig->getCurrentMode();
+                $createdAt = $this->dateTimeFactory->create(
+                    $order->getCreatedAt(),
+                    new \DateTimeZone('UTC')
+                );
 
                 $donationModel = $this->donationFactory->create();
 
-                $this->donationResource->load($donationModel, $maskedId, 'masked_quote_id');
-
                 $donationModel
-                    ->setStatus(DonationModel::STATUS_CONFIRMED);
-                $this->donationResource->save($donationModel);
+                    ->setMaskedQuoteId($maskedId)
+                    ->setDonationAmount($order->getDonmodonation())
+                    ->setCreatedAt($createdAt)
+                    ->setStatus(DonationModel::STATUS_PENDING)
+                    ->setMode($currentMode);
             }
 
             try {

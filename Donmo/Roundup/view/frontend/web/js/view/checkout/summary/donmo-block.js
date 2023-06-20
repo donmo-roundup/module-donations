@@ -39,6 +39,8 @@ define([
         },
 
         insertIntegration: function (){
+            console.log('quote id', quote.getQuoteId())
+
             const donmo = DonmoRoundup(
                 {
                     publicKey: this.donmoConfig.publicKey,
