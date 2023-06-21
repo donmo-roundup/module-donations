@@ -24,4 +24,9 @@
     <event name="order_cancel_after">
         <observer name="donmo_cancel_order" instance="Donmo\Roundup\Observer\RemoveDonationWithOrder" />
     </event>
+
+    <event name="sales_order_creditmemo_refund">
+        <observer name="donmo_refund_order" instance="Donmo\Roundup\Observer\RemoveDonationWithOrder" />
+    </event>
+
 </config>

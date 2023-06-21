@@ -10,14 +10,18 @@ class AddDonationAmountToOrder implements ObserverInterface
     // Save Donmo donation amount before placing the order
     public function execute(Observer $observer)
     {
-        $quote = $observer->getQuote();
+        try {
+            $quote = $observer->getQuote();
 
-        $donation = $quote->getDonmodonation();
-        if (!$donation) {
-            return $this;
+            $donation = $quote->getDonmodonation();
+            if (!$donation) {
+                return $this;
+            }
+
+            $order = $observer->getOrder();
+            $order->setData('donmodonation', $donation);
+        } catch (\Exception $exception) {
+            $this->logger->error("Donmo AddDonationAmountToOrder Observer error:\n" . $exception);
         }
-
-        $order = $observer->getOrder();
-        $order->setData('donmodonation', $donation);
     }
 }
