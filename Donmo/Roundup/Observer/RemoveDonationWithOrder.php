@@ -42,6 +42,7 @@ class RemoveDonationWithOrder implements ObserverInterface
     {
         try {
             $order = null;
+            $newDonationStatus = DonationModel::STATUS_DELETED;
             $eventName = $observer->getEvent()->getName();
 
             if ($eventName == 'order_cancel_after') {
@@ -50,6 +51,7 @@ class RemoveDonationWithOrder implements ObserverInterface
 
             if ($eventName == 'sales_order_creditmemo_refund') {
                 $order = $observer->getEvent()->getCreditmemo()->getOrder();
+                $newDonationStatus = DonationModel::STATUS_REFUNDED;
             }
 
             if ($order->getDonmodonation() > 0) {
@@ -61,14 +63,14 @@ class RemoveDonationWithOrder implements ObserverInterface
                 $donationMode = $donationModel->getData('mode');
 
                 if ($donationModel->getData('status') != DonationModel::STATUS_SENT) {
-                    $donationModel->setData('status', DonationModel::STATUS_DELETED);
+                    $donationModel->setData('status', $newDonationStatus);
                     $this->donationResource->save($donationModel);
                 } // make Delete request to Donmo API for only if donation is already sent
                 else {
                     $status = $this->apiService->deleteDonation($donationMode, $maskedId);
 
                     if ($status == 200) {
-                        $donationModel->setData('status', DonationModel::STATUS_DELETED);
+                        $donationModel->setData('status', $newDonationStatus);
                         $this->donationResource->save($donationModel);
                     }
                 }
