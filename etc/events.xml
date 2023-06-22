@@ -14,11 +14,13 @@
     </event>
 
     <!--  Create donation on order success  -->
-    <event name="sales_order_save_after">
+    <event name="sales_order_place_after">
         <observer name="donmo_create_donation_observer" instance="Donmo\Roundup\Observer\CreateDonation" />
-        <observer name="donmo_confirm_donation_observer" instance="Donmo\Roundup\Observer\ConfirmDonationOnOrderComplete" />
     </event>
 
+    <event name="sales_order_save_after">
+        <observer name="donmo_confirm_donation_observer" instance="Donmo\Roundup\Observer\ConfirmDonationOnOrderComplete" />
+    </event>
 
     <!--  Remove donation on order cancellation  -->
     <event name="order_cancel_after">

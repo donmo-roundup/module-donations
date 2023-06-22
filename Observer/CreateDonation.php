@@ -8,8 +8,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 use Donmo\Roundup\Model\Config as DonmoConfig;
 
-use Magento\Framework\Intl\DateTimeFactory;
-
 
 use Donmo\Roundup\Model\Donmo\DonationFactory;
 use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
@@ -24,7 +22,6 @@ class CreateDonation implements ObserverInterface
     private DonationFactory $donationFactory;
     private DonationResource $donationResource;
 
-    private DateTimeFactory $dateTimeFactory;
 
     private Logger $logger;
     private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId;
@@ -32,7 +29,6 @@ class CreateDonation implements ObserverInterface
     public function __construct(
         DonationFactory  $donationFactory,
         DonationResource $donationResource,
-        DateTimeFactory $dateTimeFactory,
         Logger $logger,
         DonmoConfig $config,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
@@ -40,7 +36,6 @@ class CreateDonation implements ObserverInterface
     {
         $this->donationFactory = $donationFactory;
         $this->donationResource = $donationResource;
-        $this->dateTimeFactory = $dateTimeFactory;
         $this->logger = $logger;
         $this->donmoConfig = $config;
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
@@ -49,29 +44,23 @@ class CreateDonation implements ObserverInterface
 
     public function execute(Observer $observer)
     {
+        $order = $observer->getEvent()->getOrder();
+
+        $donationAmount = (float) $order->getDonmodonation();
+
         try {
-            $order = $observer->getEvent()->getOrder();
-            if ($order->getState() == 'new') {
-                if ($order->getDonmodonation() > 0) {
-                    $orderId = $order->getId();
-                    $quoteId = $order->getQuoteId();
-                    $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
-                    $currentMode = $this->donmoConfig->getCurrentMode();
-                    $createdAt = $this->dateTimeFactory->create(
-                        $order->getCreatedAt(),
-                        new \DateTimeZone('UTC')
-                    );
+            if ($donationAmount > 0) {
+                $quoteId = $order->getQuoteId();
+                $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
+                $currentMode = $this->donmoConfig->getCurrentMode();
 
-                    $donationModel = $this->donationFactory->create();
+                $donationModel = $this->donationFactory->create();
 
-                    $donationModel
-                        ->setMaskedQuoteId($maskedId)
-                        ->setOrderId($orderId)
-                        ->setDonationAmount($order->getDonmodonation())
-                        ->setCreatedAt($createdAt)
-                        ->setStatus(DonationModel::STATUS_PENDING)
-                        ->setMode($currentMode);
-                }
+                $donationModel
+                    ->setMaskedQuoteId($maskedId)
+                    ->setDonationAmount($donationAmount)
+                    ->setStatus(DonationModel::STATUS_PENDING)
+                    ->setMode($currentMode);
 
                 $this->donationResource->save($donationModel);
             }
