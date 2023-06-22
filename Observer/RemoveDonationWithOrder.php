@@ -54,7 +54,9 @@ class RemoveDonationWithOrder implements ObserverInterface
                 $newDonationStatus = DonationModel::STATUS_REFUNDED;
             }
 
-            if ($order->getDonmodonation() > 0) {
+            $donationAmount = (float) $order->getDonmodonation();
+
+            if ($donationAmount> 0) {
                 $quoteId = $order->getQuoteId();
                 $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
 
@@ -65,7 +67,8 @@ class RemoveDonationWithOrder implements ObserverInterface
                 if ($donationModel->getData('status') != DonationModel::STATUS_SENT) {
                     $donationModel->setData('status', $newDonationStatus);
                     $this->donationResource->save($donationModel);
-                } // make Delete request to Donmo API for only if donation is already sent
+                }
+                // make Delete request to Donmo API for only if donation is already sent
                 else {
                     $status = $this->apiService->deleteDonation($donationMode, $maskedId);
 

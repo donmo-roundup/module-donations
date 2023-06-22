@@ -37,9 +37,12 @@ class ConfirmDonationOnOrderComplete implements ObserverInterface
     {
         try {
             $order = $observer->getEvent()->getOrder();
-            if ($order->getState() == 'complete') {
-                if ($order->getDonmodonation() > 0) {
+            $donationAmount = (float) $order->getDonmodonation();
 
+            if ($order->getState() == 'complete') {
+                if ($donationAmount > 0) {
+
+                    $orderId = $order->getId();
                     $quoteId = $order->getQuoteId();
                     $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
 
@@ -48,11 +51,11 @@ class ConfirmDonationOnOrderComplete implements ObserverInterface
                     $this->donationResource->load($donationModel, $maskedId, 'masked_quote_id');
 
                     $donationModel
-                        ->setStatus(DonationModel::STATUS_CONFIRMED);
+                        ->setStatus(DonationModel::STATUS_CONFIRMED)
+                        ->setOrderId($orderId);
                     $this->donationResource->save($donationModel);
                 }
 
-                $this->donationResource->save($donationModel);
             }
         } catch (\Exception $exception) {
             $this->logger->error("Donmo ConfirmDonationOnOrderComplete Observer error:\n" . $exception);

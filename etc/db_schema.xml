@@ -20,9 +20,9 @@
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Order Id"/>
 
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At" default="CURRENT_TIMESTAMP"/>
 
-        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At" default="CURRENT_TIMESTAMP"/>
 
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -31,6 +31,8 @@
 
         <constraint xsi:type="unique" referenceId="DONMO_DONATION_MASKED_QUOTE_ID">
             <column name="masked_quote_id"/>
+            <column name="mode"/>
+            <column name="status"/>
         </constraint>
 
         <constraint xsi:type="foreign" referenceId="DONMO_DONATION_MASKED_QUOTE_ID_QUOTE_ID_MASK_MASKED_ID" table="donmo_donation"

@@ -71,6 +71,7 @@ class ApiService
                 $this->logger->error("Unsuccessful Delete Donation API request: \n" . $body);
             }
 
+            return $status;
     }
 
 }
