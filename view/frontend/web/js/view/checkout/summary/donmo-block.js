@@ -5,7 +5,7 @@ define([
     'Magento_Checkout/js/model/quote',
     'mage/url',
     'Magento_Checkout/js/action/get-payment-information'
-], function (Component, ko, totals, quote, url, getPaymentInformation) {
+], function (Component, ko, totals, quote, url, getTotalsAction) {
     return Component.extend({
         defaults: {
             template: 'Donmo_Roundup/checkout/summary/donmo-block',
@@ -24,7 +24,12 @@ define([
                 body: JSON.stringify({
                     amount: donationAmount
                 })
-            }).then(response => response.json()).then(() => getPaymentInformation())
+            }).then(response => {
+                if(!response.ok) {
+                    throw new Error();
+                }
+                return response.json()
+            }).then(() => getTotalsAction())
         },
         removeDonation: () => {
             const path = url.build('donmo/roundup/remove');
@@ -34,13 +39,16 @@ define([
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            }).then(response => response.json()).then(
-                () => getPaymentInformation()).then(() => console.log('remove donation completed'))
+            }).then(response => {
+                if(! response.ok) {
+                    throw new Error();
+                }
+                return response.json()
+            }).then(
+                () => getTotalsAction())
         },
 
         insertIntegration: function (){
-            console.log('quote id', quote.getQuoteId())
-
             const donmo = DonmoRoundup(
                 {
                     publicKey: this.donmoConfig.publicKey,
@@ -60,7 +68,7 @@ define([
 
             donmo.build()
 
-            // on totals change, trigger grandTotal observable with new value
+            // on totals change, trigger grandTotal observable with its value
             quote.totals.subscribe((data) => this.grandTotal(data['grand_total']))
 
             // on grandTotal change, refresh donmo integration

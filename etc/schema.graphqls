@@ -1,0 +1,16 @@
+type CartPrices  @doc(description: "Contains details about the final price of items in the cart, including discount and tax information.") {
+    donmo_donation: Money
+        @doc(description: "Donmo Roundup donation")
+        @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\DonationResolver")
+}
+
+type Mutation {
+    addDonationToQuote(cartId: String!, donationAmount: Float!): DonmoDonationOutput @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\AddDonationToQuote") @doc(description:"Add Donmo donation to quote")
+
+    removeDonationFromQuote(cartId: String!): DonmoDonationOutput @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\RemoveDonationFromQuote") @doc(description:"Remove Donmo donation from quote")
+}
+
+type DonmoDonationOutput {
+   message: String @doc(description: "Result message")
+}
+

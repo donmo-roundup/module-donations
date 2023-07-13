@@ -2,38 +2,35 @@
 
 namespace Donmo\Roundup\Controller\Roundup;
 
-use Magento\Checkout\Model\Cart as CustomerCart;
+use Donmo\Roundup\Logger\Logger;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\Quote\Model\Quote;
-use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Api\CartRepositoryInterface;
+
 
 class Create implements HttpPostActionInterface
 {
-
-    /**
-     * @var Request
-     */
-    private $request;
+    private Logger $logger;
+    private ResultFactory $resultFactory;
+    private Request $request;
+    private CheckoutSession $checkoutSession;
+    private CartRepositoryInterface $cartRepository;
 
     public function __construct(
         ResultFactory $resultFactory,
         Request $request,
-        Quote $quote,
-        Session $checkoutSession,
-        CartRepositoryInterface $quoteRepository,
-        CustomerCart $cart,
+        CheckoutSession $checkoutSession,
+        CartRepositoryInterface $cartRepository,
+        Logger $logger
     ) {
+        $this->logger = $logger;
         $this->resultFactory = $resultFactory;
         $this->request = $request;
-        $this->quote = $quote;
         $this->checkoutSession = $checkoutSession;
-        $this->quoteRepository = $quoteRepository;
-        $this->cart = $cart;
+        $this->cartRepository = $cartRepository;
     }
-
 
     public function execute()
     {
@@ -42,17 +39,25 @@ class Create implements HttpPostActionInterface
 
         $donationAmount = floatval($this->request->getBodyParams()['amount']);
 
-        $cartQuote = $this->cart->getQuote();
-        $cartQuote->setDonmodonation($donationAmount)->collectTotals();
-        $this->quoteRepository->save($cartQuote);
-        $this->checkoutSession->setCartGrandTotal($cartQuote->getGrandTotal());
+        if ($this->checkoutSession->hasQuote()) {
+            $quote = $this->checkoutSession->getQuote();
 
-        $jsonResponse->setData(
-            [
-                'status' => 'success',
-                'donationAmount' => $donationAmount
-            ]
-        );
+            $quote->setDonmodonation($donationAmount)->collectTotals();
+            $this->cartRepository->save($quote);
+
+            $jsonResponse->setData(
+                [
+                    'message' => 'success',
+                ]
+            );
+        } else {
+            $jsonResponse->setHttpResponseCode(404);
+
+            $jsonResponse->setData(
+                ['message' => 'no quote provided']
+            );
+        }
+
         return $jsonResponse;
     }
 }
