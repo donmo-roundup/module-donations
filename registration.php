@@ -4,8 +4,7 @@
      * See COPYING.txt for license details.
      */
 \Magento\Framework\Component\ComponentRegistrar::register(
-        \Magento\Framework\Component\ComponentRegistrar::MODULE,
-        'Donmo_Roundup',
-        __DIR__
-    );
-
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    'Donmo_Roundup',
+    __DIR__
+);

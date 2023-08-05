@@ -2,7 +2,6 @@
 
 namespace Donmo\Roundup\Observer;
 
-
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -32,8 +31,7 @@ class CreateDonation implements ObserverInterface
         Logger $logger,
         DonmoConfig $config,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
-    )
-    {
+    ) {
         $this->donationFactory = $donationFactory;
         $this->donationResource = $donationResource;
         $this->logger = $logger;
@@ -42,7 +40,7 @@ class CreateDonation implements ObserverInterface
     }
 
 
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         $order = $observer->getEvent()->getOrder();
 

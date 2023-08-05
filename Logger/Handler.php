@@ -2,7 +2,6 @@
 
 namespace Donmo\Roundup\Logger;
 
-
 use Magento\Framework\Logger\Handler\Base;
 use Monolog\Logger;
 

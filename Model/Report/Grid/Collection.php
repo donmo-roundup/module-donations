@@ -15,7 +15,7 @@ class Collection extends PageCollection implements SearchResultInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document','Donmo\Roundup\Model\ResourceModel\DonmoReport');
+        $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', 'Donmo\Roundup\Model\ResourceModel\DonmoReport');
     }
 
     /**
@@ -31,7 +31,7 @@ class Collection extends PageCollection implements SearchResultInterface
     /**
      * Set search criteria.
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface|null $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -43,7 +43,8 @@ class Collection extends PageCollection implements SearchResultInterface
     /**
      * @return int
      */
-    public function getCurrentPage(){
+    public function getCurrentPage()
+    {
         return $this->getCurPage();
     }
 
@@ -51,7 +52,8 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param $currentPage
      * @return $this
      */
-    public function setCurrentPage($currentPage){
+    public function setCurrentPage($currentPage)
+    {
         return $this->setCurPage($currentPage);
     }
     /**

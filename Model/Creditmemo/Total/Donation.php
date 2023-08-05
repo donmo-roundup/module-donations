@@ -7,7 +7,7 @@ use Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal;
 
 class Donation extends AbstractTotal
 {
-    public function collect(Creditmemo $creditmemo)
+    public function collect(Creditmemo $creditmemo): Donation
     {
         $creditmemo->setDonmodonation(0);
 

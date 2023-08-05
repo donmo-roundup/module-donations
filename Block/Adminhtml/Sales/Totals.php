@@ -18,8 +18,7 @@ class Totals extends Template
         Config $config,
         Context $context,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->config = $config;
         $this->context = $context;

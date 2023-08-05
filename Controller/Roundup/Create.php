@@ -8,7 +8,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Api\CartRepositoryInterface;
-
+use Magento\Framework\Controller\ResultInterface;
 
 class Create implements HttpPostActionInterface
 {
@@ -32,7 +32,7 @@ class Create implements HttpPostActionInterface
         $this->cartRepository = $cartRepository;
     }
 
-    public function execute()
+    public function execute(): ResultInterface
     {
         // Add Donation to quote
         $jsonResponse = $this->resultFactory->create(ResultFactory::TYPE_JSON);

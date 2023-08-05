@@ -2,7 +2,6 @@
 
 namespace Donmo\Roundup\Observer;
 
-
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -12,6 +11,7 @@ use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
 
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Donmo\Roundup\Logger\Logger;
+
 class ConfirmDonationOnOrderComplete implements ObserverInterface
 {
     private DonationResource $donationResource;
@@ -23,17 +23,15 @@ class ConfirmDonationOnOrderComplete implements ObserverInterface
         DonationFactory  $donationFactory,
         DonationResource $donationResource,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
-    )
-    {
+    ) {
         $this->logger = $logger;
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
         $this->donationFactory = $donationFactory;
         $this->donationResource = $donationResource;
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
 
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         try {
             $order = $observer->getEvent()->getOrder();

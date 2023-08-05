@@ -5,7 +5,8 @@ namespace Donmo\Roundup\Ui\Component\Listing\DataProviders;
 use Magento\Ui\DataProvider\ModifierPoolDataProvider;
 use Donmo\Roundup\Model\Donmo\ResourceModel\Donation\CollectionFactory;
 
-class DonationsReport extends ModifierPoolDataProvider{
+class DonationsReport extends ModifierPoolDataProvider
+{
 
     public function __construct(
         $name,

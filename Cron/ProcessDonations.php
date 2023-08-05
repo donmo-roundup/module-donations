@@ -1,42 +1,41 @@
 <?php
 
 namespace Donmo\Roundup\Cron;
-use Donmo\Roundup\lib\ApiService;
-
-use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
-
-use \Magento\Framework\App\ResourceConnection;
-use \Magento\Framework\Model\ResourceModel\IteratorFactory;
-
-use Donmo\Roundup\Model\Config as DonmoConfig;
 
 use Donmo\Roundup\Logger\Logger;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Donmo\Roundup\lib\ApiService;
+use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\ResourceModel\IteratorFactory;
+use Donmo\Roundup\Model\Config as DonmoConfig;
+
 class ProcessDonations
 {
-    private $connection;
-    private DonmoConfig $donmoConfig;
     private Logger $logger;
+    private AdapterInterface $connection;
+    private DonmoConfig $donmoConfig;
     private IteratorFactory $iteratorFactory;
     private array $payload;
     private ApiService $apiService;
 
     public function __construct(
-        DonmoConfig $donmoConfig,
         Logger $logger,
         ResourceConnection $resource,
+        DonmoConfig $donmoConfig,
         IteratorFactory $iteratorFactory,
         ApiService $apiService
-    )
-    {
-        $this->donmoConfig = $donmoConfig;
+    ) {
         $this->logger = $logger;
         $this->connection = $resource->getConnection();
+        $this->donmoConfig = $donmoConfig;
         $this->iteratorFactory = $iteratorFactory;
-        $this->payload = array();
+        $this->payload = [];
         $this->apiService = $apiService;
     }
 
-    public function execute() {
+    public function execute()
+    {
         try {
             $currentMode = $this->donmoConfig->getCurrentMode();
 
@@ -61,14 +60,15 @@ class ProcessDonations
                 $status = $this->apiService->createAndConfirmDonations($currentMode, $this->payload);
 
                 if ($status == 200) {
-                    return $this->connection->update('donmo_donation',
-                        ['status' => DonationModel::STATUS_SENT], ['status = ?' => DonationModel::STATUS_CONFIRMED]);
+                    return $this->connection->update(
+                        'donmo_donation',
+                        ['status' => DonationModel::STATUS_SENT],
+                        ['status = ?' => DonationModel::STATUS_CONFIRMED]
+                    );
                 }
             }
         } catch (\Exception $e) {
             $this->logger->error("Recording donations error (Magento DB): \n" . $e);
         }
-
     }
-
 }
