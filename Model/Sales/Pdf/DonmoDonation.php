@@ -32,7 +32,7 @@ class DonmoDonation extends DefaultTotal
         return [
             [
                 'amount' => $this->getAmountPrefix() . $this->getOrder()->formatPriceTxt($amount),
-                'label' => $this->donmoConfig->getDonationLabel() . ':',
+                'label' => $this->donmoConfig->getDonationSummaryLabel() . ':',
                 'font_size' => $fontSize,
             ]
         ];

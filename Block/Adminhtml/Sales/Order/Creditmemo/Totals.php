@@ -2,24 +2,23 @@
 
 namespace Donmo\Roundup\Block\Adminhtml\Sales\Order\Creditmemo;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Donmo\Roundup\Model\Config;
+use Donmo\Roundup\Model\Config as DonmoConfig;
+use Magento\Framework\DataObject;
+use Donmo\Roundup\Model\Total\Donation;
 
 class Totals extends Template
 {
-    private Config $config;
-    private Context $context;
+    private DonmoConfig $donmoConfig;
 
     public function __construct(
         Context $context,
-        Config $config,
+        DonmoConfig $donmoConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->config = $config;
-        $this->context = $context;
+        $this->donmoConfig = $donmoConfig;
     }
     public function getSource()
     {
@@ -37,9 +36,9 @@ class Totals extends Template
         }
         $total = new DataObject(
             [
-                'code' => 'donmodonation',
+                'code' => Donation::DONATION_CODE,
                 'value' => $this->getSource()->getDonmodonation(),
-                'label' => $this->config->getDonationLabel()
+                'label' => $this->donmoConfig->getDonationSummaryLabel()
             ]
         );
 

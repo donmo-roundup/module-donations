@@ -14,22 +14,22 @@ class ApiService
 {
     private ZendClient $client;
     private Logger $logger;
-    private DonmoConfig $config;
+    private DonmoConfig $donmoConfig;
 
     public function __construct(
         ZendClientFactory $httpClientFactory,
         Logger $logger,
-        DonmoConfig $config,
+        DonmoConfig $donmoConfig,
     ) {
         $this->client = $httpClientFactory->create();
         $this->logger = $logger;
-        $this->config = $config;
+        $this->donmoConfig = $donmoConfig;
     }
 
 
     public function createAndConfirmDonations($mode, $donations): int
     {
-        $sk = $this->config->getSecretKey($mode);
+        $sk = $this->donmoConfig->getSecretKey($mode);
 
         $url = Donmo::$apiBase . '/donations/confirm';
         $this->client->setUri($url);
@@ -52,7 +52,7 @@ class ApiService
     }
     public function deleteDonation($donationMode, $id): int
     {
-            $sk = $this->config->getSecretKey($donationMode);
+            $sk = $this->donmoConfig->getSecretKey($donationMode);
 
             $url = Donmo::$apiBase . "/donations/{$id}";
             $this->client->setUri($url);

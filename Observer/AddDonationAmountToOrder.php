@@ -2,6 +2,7 @@
 
 namespace Donmo\Roundup\Observer;
 
+use Donmo\Roundup\Model\Total\Donation;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -19,7 +20,7 @@ class AddDonationAmountToOrder implements ObserverInterface
             }
 
             $order = $observer->getOrder();
-            $order->setData('donmodonation', $donation);
+            $order->setData(Donation::DONATION_CODE, $donation);
         } catch (\Exception $exception) {
             $this->logger->error("Donmo AddDonationAmountToOrder Observer error:\n" . $exception);
         }
