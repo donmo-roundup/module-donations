@@ -9,17 +9,17 @@ use Donmo\Roundup\Model\Config;
 class DonmoConfig implements LayoutProcessorInterface
 {
     private State $appState;
-    private Config $config;
+    private Config $donmoConfig;
     private string $mode;
     private bool $isActive;
 
 
-    public function __construct(State $appState, Config $config)
+    public function __construct(State $appState, Config $donmoConfig)
     {
         $this->appState = $appState;
-        $this->config = $config;
-        $this->mode = $this->config->getCurrentMode();
-        $this->isActive = $this->config->getIsActive();
+        $this->donmoConfig = $donmoConfig;
+        $this->mode = $this->donmoConfig->getCurrentMode();
+        $this->isActive = $this->donmoConfig->getIsActive();
     }
 
     public function process($jsLayout)
@@ -33,7 +33,7 @@ class DonmoConfig implements LayoutProcessorInterface
             // Set system.xml donationLabel value
             $jsLayout['components']['block-totals']['children']
                      ['donmodonation']['donmoConfig'] =
-                     ['donationLabel' => $this->config->getDonationLabel()];
+                     ['donationLabel' => $this->donmoConfig->getDonationSummaryLabel()];
 
         } else {
             $jsLayout['components']['block-totals']['children']

@@ -2,31 +2,28 @@
 
 namespace Donmo\Roundup\ViewModel\Cart;
 
+use Donmo\Roundup\Model\Config as DonmoConfig;
 use Magento\Framework\App\State;
-use Donmo\Roundup\Model\Config;
-use \Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Donmo\Roundup\Helper\Locale;
 
 class Donmo implements ArgumentInterface
 {
-    private Locale $locale;
     private State $appState;
     private mixed $mode;
-    private Config $config;
+    private DonmoConfig $donmoConfig;
     private Json $json;
-    public function __construct(State $appState, Config $config, Json $json, Locale $locale)
+    public function __construct(State $appState, DonmoConfig $donmoConfig, Json $json)
     {
-        $this->locale = $locale;
         $this->appState = $appState;
-        $this->config = $config;
-        $this->mode = $this->config->getCurrentMode();
+        $this->donmoConfig = $donmoConfig;
+        $this->mode = $this->donmoConfig->getCurrentMode();
         $this->json = $json;
     }
 
     public function getIsAvailable()
     {
-        $isActive = $this->config->getIsActive();
+        $isActive = $this->donmoConfig->getIsActive();
 
         $modesCompatible =
             $this->appState->getMode() == State::MODE_PRODUCTION && $this->mode == 'live'
@@ -36,16 +33,16 @@ class Donmo implements ArgumentInterface
         return ($isActive && $modesCompatible);
     }
 
-    public function getDonmoConfig()
+    public function getDonmoConfig(): string
     {
         return
         $this->json->serialize([
-            'publicKey' => $this->config->getPublicKey($this->mode),
-            'language' => $this->locale->getLanguageCode(),
-            'integrationTitle' => $this->config->getIntegrationTitle(),
-            'roundupMessage' => $this->config->getRoundupMessage(),
-            'thankMessage' => $this->config->getThankMessage(),
-            'errorMessage' => $this->config->getErrorMessage()
+            'publicKey' => $this->donmoConfig->getPublicKey($this->mode),
+            'language' => $this->donmoConfig->getLanguageCode(),
+            'integrationTitle' => $this->donmoConfig->getIntegrationTitle(),
+            'roundupMessage' => $this->donmoConfig->getRoundupMessage(),
+            'thankMessage' => $this->donmoConfig->getThankMessage(),
+            'errorMessage' => $this->donmoConfig->getErrorMessage()
         ]);
     }
 }

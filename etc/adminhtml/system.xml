@@ -67,7 +67,7 @@
                         <validate>validate-no-empty</validate>
                     </field>
 
-                    <field id="donate_message" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="roundup_message" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Меседж задонатити (кнопка)</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <validate>validate-no-empty</validate>
@@ -78,7 +78,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <validate>validate-no-empty</validate>
                     </field>
-                    <field id="donation_label" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="donation_summary_label" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Напис в кошику</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <validate>validate-no-empty</validate>

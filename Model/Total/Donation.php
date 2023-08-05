@@ -10,6 +10,7 @@ use Donmo\Roundup\Model\Config as DonmoConfig;
 
 class Donation extends AbstractTotal
 {
+    const DONATION_CODE = 'donmodonation';
 
     private DonmoConfig $donmoConfig;
 
@@ -36,9 +37,9 @@ class Donation extends AbstractTotal
 
         $donationAmount = $quote->getDonmodonation();
 
-        $total->setTotalAmount('donmodonation', $donationAmount);
+        $total->setTotalAmount(self::DONATION_CODE, $donationAmount);
 
-        $total->setBaseTotalAmount('donmodonation', $donationAmount);
+        $total->setBaseTotalAmount(self::DONATION_CODE, $donationAmount);
 
         return $this;
     }
@@ -49,8 +50,8 @@ class Donation extends AbstractTotal
         $donationAmount = $quote->getDonmodonation();
         if ($donationAmount) {
             return [
-                'code' => 'donmodonation',
-                'title' => $this->donmoConfig->getDonationLabel(),
+                'code' => self::DONATION_CODE,
+                'title' => $this->donmoConfig->getDonationSummaryLabel(),
                 'value' => $donationAmount
             ];
         } else {

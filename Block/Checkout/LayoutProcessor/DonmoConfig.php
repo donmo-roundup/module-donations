@@ -5,26 +5,23 @@ namespace Donmo\Roundup\Block\Checkout\LayoutProcessor;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Framework\App\State;
 use Donmo\Roundup\Model\Config;
-use Donmo\Roundup\Helper\Locale;
 
 class DonmoConfig implements LayoutProcessorInterface
 {
     private State $appState;
-    private Config $config;
+    private Config $donmoConfig;
 
-    private Locale $locale;
 
     private string $mode;
     private bool $isActive;
 
-    public function __construct(State $appState, Config $config, Locale $locale)
+    public function __construct(State $appState, Config $donmoConfig)
     {
         $this->appState = $appState;
-        $this->config = $config;
-        $this->locale = $locale;
+        $this->donmoConfig = $donmoConfig;
 
-        $this->mode = $this->config->getCurrentMode();
-        $this->isActive = $this->config->getIsActive();
+        $this->mode = $this->donmoConfig->getCurrentMode();
+        $this->isActive = $this->donmoConfig->getIsActive();
     }
 
 
@@ -42,12 +39,12 @@ class DonmoConfig implements LayoutProcessorInterface
             ['billing-step']['children']
             ['payment']['children']['afterMethods']
             ['children']['donmo-block']['donmoConfig'] = [
-                'publicKey' => $this->config->getPublicKey($this->mode),
-                'language' => $this->locale->getLanguageCode(),
-                'integrationTitle' => $this->config->getIntegrationTitle(),
-                'roundupMessage' => $this->config->getRoundupMessage(),
-                'thankMessage' => $this->config->getThankMessage(),
-                'errorMessage' => $this->config->getErrorMessage(),
+                'publicKey' => $this->donmoConfig->getPublicKey($this->mode),
+                'language' => $this->donmoConfig->getLanguageCode(),
+                'integrationTitle' => $this->donmoConfig->getIntegrationTitle(),
+                'roundupMessage' => $this->donmoConfig->getRoundupMessage(),
+                'thankMessage' => $this->donmoConfig->getThankMessage(),
+                'errorMessage' => $this->donmoConfig->getErrorMessage(),
             ];
 
             // Set system.xml donationLabel value
@@ -55,7 +52,7 @@ class DonmoConfig implements LayoutProcessorInterface
             ['sidebar']['children']['summary']
             ['children']['totals']['children']
             ['donmodonation']['donmoConfig'] =
-                ['donationLabel' => $this->config->getDonationLabel()];
+                ['donationLabel' => $this->donmoConfig->getDonationSummaryLabel()];
 
 
         } else {

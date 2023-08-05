@@ -2,26 +2,25 @@
 
 namespace Donmo\Roundup\Block\Adminhtml\Sales;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;
+
 use Magento\Framework\View\Element\Template\Context;
-use Donmo\Roundup\Model\Config;
+use Donmo\Roundup\Model\Config as DonmoConfig;
+use Magento\Framework\DataObject;
+
+use Donmo\Roundup\Model\Total\Donation;
 
 class Totals extends Template
 {
-
-    private Context $context;
-
-    private Config $config;
+    private DonmoConfig $donmoConfig;
 
     public function __construct(
-        Config $config,
         Context $context,
+        DonmoConfig $donmoConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->config = $config;
-        $this->context = $context;
+        $this->donmoConfig = $donmoConfig;
     }
 
     public function getOrder()
@@ -43,9 +42,9 @@ class Totals extends Template
         }
         $total = new DataObject(
             [
-                'code' => 'donmodonation',
+                'code' => Donation::DONATION_CODE,
                 'value' => $this->getOrder()->getDonmodonation(),
-                'label' => $this->config->getDonationLabel(),
+                'label' => $this->donmoConfig->getDonationSummaryLabel(),
             ]
         );
 

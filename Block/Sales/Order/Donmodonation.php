@@ -5,26 +5,20 @@ namespace Donmo\Roundup\Block\Sales\Order;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Tax\Model\Config;
 use Donmo\Roundup\Model\Config as DonmoConfig;
 
 class Donmodonation extends Template
 {
     protected $order;
-
-    private Config $config;
-
     private DonmoConfig $donmoConfig;
 
 
     public function __construct(
         DonmoConfig $donmoConfig,
         Context $context,
-        Config $taxConfig,
         array $data = []
     ) {
         $this->donmoConfig = $donmoConfig;
-        $this->config = $taxConfig;
         parent::__construct($context, $data);
     }
 
