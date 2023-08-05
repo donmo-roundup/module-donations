@@ -3,21 +3,17 @@
 namespace Donmo\Roundup\Block\Checkout\LayoutProcessor;
 
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
-use Magento\Framework\App\State;
 use Donmo\Roundup\Model\Config;
 
 class DonmoConfig implements LayoutProcessorInterface
 {
-    private State $appState;
     private Config $donmoConfig;
-
 
     private string $mode;
     private bool $isActive;
 
-    public function __construct(State $appState, Config $donmoConfig)
+    public function __construct(Config $donmoConfig)
     {
-        $this->appState = $appState;
         $this->donmoConfig = $donmoConfig;
 
         $this->mode = $this->donmoConfig->getCurrentMode();
@@ -27,12 +23,7 @@ class DonmoConfig implements LayoutProcessorInterface
 
     public function process($jsLayout)
     {
-        $modesCompatible =
-            $this->appState->getMode() == State::MODE_PRODUCTION && $this->mode == 'live'
-            ||
-            $this->appState->getMode() == State::MODE_DEVELOPER && $this->mode == 'test';
-
-        if ($this->isActive && $modesCompatible) {
+        if ($this->isActive) {
             // Set dynamic system.xml values to jsLayout donmoConfig
             $jsLayout['components']['checkout']['children']
             ['steps']['children']

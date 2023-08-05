@@ -73,7 +73,8 @@ class Config
         return $this->scopeConfig->getValue(self::ERROR_MESSAGE_CONFIG_NAME);
     }
 
-    public function getLanguageCode() : string {
+    public function getLanguageCode() : string
+    {
         $currentLocaleCode = $this->localeResolver->getLocale(); // uk_UA
         $languageCode = strstr($currentLocaleCode, '_', true);
         return $languageCode;
