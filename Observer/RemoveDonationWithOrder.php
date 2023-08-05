@@ -29,8 +29,7 @@ class RemoveDonationWithOrder implements ObserverInterface
         DonationResource $donationResource,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
         ApiService $apiService
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->donationFactory = $donationFactory;
         $this->donationResource = $donationResource;
@@ -38,7 +37,7 @@ class RemoveDonationWithOrder implements ObserverInterface
         $this->apiService = $apiService;
     }
 
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         try {
             $order = null;
@@ -82,5 +81,4 @@ class RemoveDonationWithOrder implements ObserverInterface
             $this->logger->error("Donmo RemoveDonationWithOrder Observer error:\n" . $e);
         }
     }
-
 }

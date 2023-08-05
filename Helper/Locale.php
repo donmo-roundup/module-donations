@@ -12,10 +12,10 @@ class Locale
         $this->localeResolver = $localeResolver;
     }
 
-    public function getLanguageCode() {
+    public function getLanguageCode(): string
+    {
         $currentLocaleCode = $this->localeResolver->getLocale(); // fr_CA
         $languageCode = strstr($currentLocaleCode, '_', true);
         return $languageCode;
     }
-
 }

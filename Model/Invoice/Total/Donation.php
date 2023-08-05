@@ -7,7 +7,7 @@ use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
 
 class Donation extends AbstractTotal
 {
-    public function collect(Invoice $invoice)
+    public function collect(Invoice $invoice): Donation
     {
         $invoice->setDonmodonation(0);
 

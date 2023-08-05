@@ -1,6 +1,7 @@
 <?php
 
 namespace Donmo\Roundup\ViewModel\Cart;
+
 use Magento\Framework\App\State;
 use Donmo\Roundup\Model\Config;
 use \Magento\Framework\Serialize\Serializer\Json;
@@ -23,7 +24,8 @@ class Donmo implements ArgumentInterface
         $this->json = $json;
     }
 
-    public function getIsAvailable() {
+    public function getIsAvailable()
+    {
         $isActive = $this->config->getIsActive();
 
         $modesCompatible =
@@ -34,7 +36,8 @@ class Donmo implements ArgumentInterface
         return ($isActive && $modesCompatible);
     }
 
-    public function getDonmoConfig() {
+    public function getDonmoConfig()
+    {
         return
         $this->json->serialize([
             'publicKey' => $this->config->getPublicKey($this->mode),
@@ -45,5 +48,4 @@ class Donmo implements ArgumentInterface
             'errorMessage' => $this->config->getErrorMessage()
         ]);
     }
-
 }

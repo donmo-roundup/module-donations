@@ -21,7 +21,8 @@ class Totals extends Template
         $this->config = $config;
         $this->context = $context;
     }
-    public function getSource() {
+    public function getSource()
+    {
         return $this->getParentBlock()->getSource();
     }
 
@@ -29,7 +30,8 @@ class Totals extends Template
     {
         return $this->getParentBlock()->getCreditmemo();
     }
-    public function initTotals() {
+    public function initTotals()
+    {
         if ($this->getSource()->getDonmodonation() == 0) {
             return $this;
         }
@@ -45,6 +47,4 @@ class Totals extends Template
 
         return $this;
     }
-
 }
-

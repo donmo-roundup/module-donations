@@ -17,9 +17,8 @@ class DonmoDonation extends DefaultTotal
         Calculation $taxCalculation,
         CollectionFactory $ordersFactory,
         Config $donmoConfig,
-        array $data =[]
-    )
-    {
+        array $data = []
+    ) {
         parent::__construct($taxHelper, $taxCalculation, $ordersFactory, $data);
 
         $this->donmoConfig = $donmoConfig;
@@ -27,7 +26,7 @@ class DonmoDonation extends DefaultTotal
 
     public function getTotalsForDisplay(): array
     {
-    $amount = $this->getOrder()->getDonmodonation();
+        $amount = $this->getOrder()->getDonmodonation();
 
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
         return [
@@ -37,10 +36,5 @@ class DonmoDonation extends DefaultTotal
                 'font_size' => $fontSize,
             ]
         ];
-
-    return [];
-
     }
-
-
 }

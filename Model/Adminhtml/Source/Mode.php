@@ -7,7 +7,7 @@ class Mode
     const TEST = 'test';
     const LIVE = 'live';
 
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             [

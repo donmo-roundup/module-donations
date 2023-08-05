@@ -9,6 +9,6 @@ class DonmoReport extends AbstractDb
 
     protected function _construct()
     {
-        $this->_init('donmo_donation','entity_id');
+        $this->_init('donmo_donation', 'entity_id');
     }
 }

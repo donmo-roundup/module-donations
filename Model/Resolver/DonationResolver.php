@@ -17,7 +17,7 @@ class DonationResolver implements ResolverInterface
         $this->logger = $logger;
     }
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): array
     {
         /** @var Quote $quote */
         $quote = $value['model'];

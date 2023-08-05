@@ -8,11 +8,13 @@ use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Donmo\Roundup\Model\Config as DonmoConfig;
 
-class Donation extends AbstractTotal {
+class Donation extends AbstractTotal
+{
 
     private DonmoConfig $donmoConfig;
 
-    public function __construct(DonmoConfig $donmoConfig) {
+    public function __construct(DonmoConfig $donmoConfig)
+    {
         $this->donmoConfig = $donmoConfig;
     }
 
@@ -26,7 +28,7 @@ class Donation extends AbstractTotal {
         Quote $quote,
         ShippingAssignmentInterface $shippingAssignment,
         Total $total
-    ) {
+    ): static {
         parent::collect($quote, $shippingAssignment, $total);
         if (!count($shippingAssignment->getItems())) {
             return $this;
@@ -41,7 +43,7 @@ class Donation extends AbstractTotal {
         return $this;
     }
 
-    public function fetch(Quote $quote, Total $total)
+    public function fetch(Quote $quote, Total $total): array
     {
 
         $donationAmount = $quote->getDonmodonation();
@@ -52,9 +54,7 @@ class Donation extends AbstractTotal {
                 'value' => $donationAmount
             ];
         } else {
-            return array();
+            return [];
         }
     }
-
-
 }

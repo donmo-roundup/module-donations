@@ -21,8 +21,7 @@ class Remove implements HttpDeleteActionInterface
         Session $checkoutSession,
         CartRepositoryInterface $cartRepository,
         Logger $logger
-    )
-    {
+    ) {
         $this->resultFactory = $resultFactory;
         $this->checkoutSession = $checkoutSession;
         $this->cartRepository = $cartRepository;

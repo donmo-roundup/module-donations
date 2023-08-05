@@ -18,47 +18,47 @@ class Config
         $this->scopeConfig = $scopeConfig;
     }
 
-    public function getCurrentMode()
+    public function getCurrentMode(): string
     {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/donmo_mode");
     }
 
-    public function getSecretKey($mode)
+    public function getSecretKey(string $mode) : string
     {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/donmo_{$mode}_sk");
     }
 
-    public function getPublicKey($mode)
+    public function getPublicKey(string $mode)
     {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/donmo_{$mode}_pk");
     }
 
-    public function getIsActive() {
+    public function getIsActive() : bool
+    {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/is_active");
     }
-
-    public function getLanguageCode() {
-        return $this->scopeConfig->getValue("donmo_roundup/donmo/language");
-    }
-
-    public function getIntegrationTitle() {
+    public function getIntegrationTitle(): string
+    {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/integration_title");
     }
 
-    public function getRoundupMessage() {
+    public function getRoundupMessage(): string
+    {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/donate_message");
     }
 
-    public function getThankMessage() {
+    public function getThankMessage(): string
+    {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/thank_message");
     }
 
-    public function getDonationLabel() {
+    public function getDonationLabel(): string
+    {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/donation_label");
     }
 
-    public function getErrorMessage() {
+    public function getErrorMessage(): string
+    {
         return $this->scopeConfig->getValue("donmo_roundup/donmo/error_message");
     }
-
 }

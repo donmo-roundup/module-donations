@@ -6,6 +6,7 @@ use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Framework\App\State;
 use Donmo\Roundup\Model\Config;
 use Donmo\Roundup\Helper\Locale;
+
 class DonmoConfig implements LayoutProcessorInterface
 {
     private State $appState;
@@ -34,7 +35,7 @@ class DonmoConfig implements LayoutProcessorInterface
             ||
             $this->appState->getMode() == State::MODE_DEVELOPER && $this->mode == 'test';
 
-        if($this->isActive && $modesCompatible) {
+        if ($this->isActive && $modesCompatible) {
             // Set dynamic system.xml values to jsLayout donmoConfig
             $jsLayout['components']['checkout']['children']
             ['steps']['children']

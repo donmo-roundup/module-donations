@@ -6,7 +6,6 @@ use Donmo\Roundup\lib\Donmo as Donmo;
 use Donmo\Roundup\Logger\Logger;
 use Donmo\Roundup\Model\Config as DonmoConfig;
 
-use Donmo\Roundup\Model\Donmo\DonationFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Zend_Http_Client;
@@ -16,23 +15,20 @@ class ApiService
     private ZendClient $client;
     private Logger $logger;
     private DonmoConfig $config;
-    private DonationFactory $donationFactory;
 
     public function __construct(
         ZendClientFactory $httpClientFactory,
         Logger $logger,
         DonmoConfig $config,
-        DonationFactory $donationFactory
-    )
-    {
+    ) {
         $this->client = $httpClientFactory->create();
         $this->logger = $logger;
         $this->config = $config;
-        $this->donationFactory = $donationFactory;
     }
 
 
-    public function createAndConfirmDonations($mode, $donations) {
+    public function createAndConfirmDonations($mode, $donations): int
+    {
         $sk = $this->config->getSecretKey($mode);
 
         $url = Donmo::$apiBase . '/donations/confirm';
@@ -54,7 +50,8 @@ class ApiService
 
         return $status;
     }
-    public function deleteDonation($donationMode, $id) {
+    public function deleteDonation($donationMode, $id): int
+    {
             $sk = $this->config->getSecretKey($donationMode);
 
             $url = Donmo::$apiBase . "/donations/{$id}";
@@ -65,13 +62,12 @@ class ApiService
             $result = $this->client->request();
             $status = $result->getStatus();
             $body = $result->getBody();
-            if ($status == 200) {
-                $this->logger->info("Donmo DeleteDonation API Request Successful: \n" . $body);
-            } else {
-                $this->logger->error("Unsuccessful Delete Donation API request: \n" . $body);
-            }
+        if ($status == 200) {
+            $this->logger->info("Donmo DeleteDonation API Request Successful: \n" . $body);
+        } else {
+            $this->logger->error("Unsuccessful Delete Donation API request: \n" . $body);
+        }
 
             return $status;
     }
-
 }
