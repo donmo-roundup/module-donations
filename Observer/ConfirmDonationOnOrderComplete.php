@@ -11,6 +11,7 @@ use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
 
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Donmo\Roundup\Logger\Logger;
+use Magento\Sales\Model\Order;
 
 class ConfirmDonationOnOrderComplete implements ObserverInterface
 {
@@ -34,12 +35,14 @@ class ConfirmDonationOnOrderComplete implements ObserverInterface
     public function execute(Observer $observer): void
     {
         try {
-            $order = $observer->getEvent()->getOrder();
-            $donationAmount = (float) $order->getDonmodonation();
+            /* @var Order $order */
+            $order = $observer->getEvent()->getData('order');
+
+            /* @var float $donationAmount */
+            $donationAmount = $order->getData('donmodonation');
 
             if ($order->getState() == 'complete') {
                 if ($donationAmount > 0) {
-
                     $orderId = $order->getId();
                     $quoteId = $order->getQuoteId();
                     $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);

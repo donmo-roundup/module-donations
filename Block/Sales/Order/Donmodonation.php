@@ -43,7 +43,7 @@ class Donmodonation extends Template
             [
                 'code' => 'donmodonation',
                 'value' => $this->getOrder()->getDonmodonation(),
-                'label' => $this->donmoConfig->getDonationLabel(),
+                'label' => $this->donmoConfig->getDonationSummaryLabel(),
             ]
         );
         $this->getParentBlock()->addTotal($total, 'subtotal');

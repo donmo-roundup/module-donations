@@ -14,6 +14,7 @@ use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
 
 
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Sales\Model\Order;
 
 class RemoveDonationWithOrder implements ObserverInterface
 {
@@ -45,15 +46,17 @@ class RemoveDonationWithOrder implements ObserverInterface
             $eventName = $observer->getEvent()->getName();
 
             if ($eventName == 'order_cancel_after') {
+                /* @var Order $order */
                 $order = $observer->getEvent()->getOrder();
             }
 
             if ($eventName == 'sales_order_creditmemo_refund') {
+                /* @var Order $order */
                 $order = $observer->getEvent()->getCreditmemo()->getOrder();
                 $newDonationStatus = DonationModel::STATUS_REFUNDED;
             }
 
-            $donationAmount = (float) $order->getDonmodonation();
+            $donationAmount = (float) $order->getData('donmodonation');
 
             if ($donationAmount> 0) {
                 $quoteId = $order->getQuoteId();
