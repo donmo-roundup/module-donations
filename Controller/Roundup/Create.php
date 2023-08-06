@@ -19,11 +19,11 @@ class Create implements HttpPostActionInterface
     private CartRepositoryInterface $cartRepository;
 
     public function __construct(
+        Logger $logger,
         ResultFactory $resultFactory,
         Request $request,
         CheckoutSession $checkoutSession,
         CartRepositoryInterface $cartRepository,
-        Logger $logger
     ) {
         $this->logger = $logger;
         $this->resultFactory = $resultFactory;
@@ -38,6 +38,19 @@ class Create implements HttpPostActionInterface
         $jsonResponse = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         $donationAmount = floatval($this->request->getBodyParams()['amount']);
+
+        if (!is_numeric($donationAmount) || $donationAmount < 0) {
+            $jsonResponse->setHttpResponseCode(400);
+
+            $jsonResponse->setData(
+                [
+                    'message' => 'Invalid donation',
+                ]
+            );
+            return $jsonResponse;
+        }
+
+        $this->checkoutSession->loadCustomerQuote();
 
         if ($this->checkoutSession->hasQuote()) {
             $quote = $this->checkoutSession->getQuote();

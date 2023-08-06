@@ -16,11 +16,10 @@ class RemoveDonationFromQuote implements ResolverInterface
     private CartRepositoryInterface $cartRepository;
     private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId;
 
-
     public function __construct(
         Logger $logger,
         CartRepositoryInterface $cartRepository,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
     ) {
         $this->logger = $logger;
         $this->cartRepository = $cartRepository;
@@ -31,9 +30,7 @@ class RemoveDonationFromQuote implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): array
     {
         $maskedId = $args['cartId'];
-
         $quoteId = $this->maskedQuoteIdToQuoteId->execute($maskedId);
-
         $quote = $this->cartRepository->get($quoteId);
 
         $quote->setDonmodonation(0)->collectTotals();

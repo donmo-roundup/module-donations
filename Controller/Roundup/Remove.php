@@ -31,6 +31,7 @@ class Remove implements HttpDeleteActionInterface
     {
         // Remove Donation from quote
         $jsonResponse = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $this->checkoutSession->loadCustomerQuote();
 
         if ($this->checkoutSession->hasQuote()) {
             $quote = $this->checkoutSession->getQuote();
