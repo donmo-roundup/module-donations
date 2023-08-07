@@ -3,72 +3,65 @@
 namespace Donmo\Roundup\Cron;
 
 use Donmo\Roundup\Logger\Logger;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Donmo\Roundup\Api\DonationManagementInterface;
+use Donmo\Roundup\Api\DonationRepositoryInterface;
 use Donmo\Roundup\lib\ApiService;
-use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\ResourceModel\IteratorFactory;
 use Donmo\Roundup\Model\Config as DonmoConfig;
+use Donmo\Roundup\Api\Data\DonationInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class ProcessDonations
 {
     private Logger $logger;
-    private AdapterInterface $connection;
     private DonmoConfig $donmoConfig;
-    private IteratorFactory $iteratorFactory;
-    private array $payload;
     private ApiService $apiService;
+    private DonationRepositoryInterface $donationRepository;
+    private FilterBuilder $filterBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     public function __construct(
         Logger $logger,
-        ResourceConnection $resource,
         DonmoConfig $donmoConfig,
-        IteratorFactory $iteratorFactory,
-        ApiService $apiService
+        ApiService $apiService,
+        DonationRepositoryInterface $donationRepository,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->logger = $logger;
-        $this->connection = $resource->getConnection();
         $this->donmoConfig = $donmoConfig;
-        $this->iteratorFactory = $iteratorFactory;
-        $this->payload = [];
         $this->apiService = $apiService;
+        $this->donationRepository = $donationRepository;
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
-    public function execute()
+    public function execute(): void
     {
         try {
             $currentMode = $this->donmoConfig->getCurrentMode();
+            $statusFilter = $this->filterBuilder->setField(DonationInterface::STATUS)->setValue(DonationManagementInterface::STATUS_CONFIRMED)->setConditionType('eq')->create();
+            $modeFilter = $this->filterBuilder->setField(DonationInterface::MODE)->setValue($currentMode)->setConditionType('eq')->create();
 
-            $query = $this->connection->select()->from('donmo_donation')
-                ->where('status = ?', DonationModel::STATUS_CONFIRMED)
-                ->where('mode = ?', $currentMode);
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilters([$statusFilter])
+                ->addFilters([$modeFilter])
+                ->create();
 
-            $iterator = $this->iteratorFactory->create();
+            $donations = $this->donationRepository->getList($searchCriteria)->getItems();
 
-            $iterator->walk((string) $query, [function (array $result) {
-                $donation_data = [
-                    'donationAmount' => (float) $result['row']['donation_amount'],
-                    'createdAt' => $result['row']['created_at'],
-                    'orderId' => $result['row']['masked_quote_id'],
-                ];
-
-                $this->payload[] = $donation_data;
-            }], [], $this->connection);
-
-
-            if (count($this->payload)) {
-                $status = $this->apiService->createAndConfirmDonations($currentMode, $this->payload);
+            if (count($donations)) {
+                $status = $this->apiService->createAndConfirmDonations($currentMode, $donations);
 
                 if ($status == 200) {
-                    return $this->connection->update(
-                        'donmo_donation',
-                        ['status' => DonationModel::STATUS_SENT],
-                        ['status = ?' => DonationModel::STATUS_CONFIRMED]
-                    );
+                    foreach ($donations as $donation) {
+                        $donation->setStatus(DonationManagementInterface::STATUS_SENT);
+                        $this->donationRepository->save($donation);
+                    }
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->error("Recording donations error (Magento DB): \n" . $e);
+            $this->logger->error("ProcessDonations Cron Error: \n" . $e);
         }
     }
 }

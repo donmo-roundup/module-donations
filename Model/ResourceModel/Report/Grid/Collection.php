@@ -1,12 +1,12 @@
 <?php
 
-namespace Donmo\Roundup\Model\Report\Grid;
+namespace Donmo\Roundup\Model\ResourceModel\Report\Grid;
 
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 
 class Collection extends PageCollection implements SearchResultInterface
 {
@@ -15,7 +15,7 @@ class Collection extends PageCollection implements SearchResultInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', 'Donmo\Roundup\Model\ResourceModel\DonmoReport');
+        $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', 'Donmo\Roundup\Model\ResourceModel\Report');
     }
 
     /**

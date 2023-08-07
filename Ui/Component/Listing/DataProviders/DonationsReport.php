@@ -3,7 +3,7 @@
 namespace Donmo\Roundup\Ui\Component\Listing\DataProviders;
 
 use Magento\Ui\DataProvider\ModifierPoolDataProvider;
-use Donmo\Roundup\Model\Donmo\ResourceModel\Donation\CollectionFactory;
+use Donmo\Roundup\Model\ResourceModel\Donation\CollectionFactory;
 
 class DonationsReport extends ModifierPoolDataProvider
 {

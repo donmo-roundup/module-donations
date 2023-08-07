@@ -14,7 +14,7 @@
     </event>
 
     <!--  Create donation on order success  -->
-    <event name="sales_order_place_after">
+    <event name="checkout_submit_all_after">
         <observer name="donmo_create_donation_observer" instance="Donmo\Roundup\Observer\CreateDonation" />
     </event>
 
@@ -24,11 +24,11 @@
 
     <!--  Remove donation on order cancellation  -->
     <event name="order_cancel_after">
-        <observer name="donmo_cancel_order" instance="Donmo\Roundup\Observer\RemoveDonationWithOrder" />
+        <observer name="donmo_cancel_order" instance="Donmo\Roundup\Observer\CancelDonationWithOrder" />
     </event>
 
     <event name="sales_order_creditmemo_refund">
-        <observer name="donmo_refund_order" instance="Donmo\Roundup\Observer\RemoveDonationWithOrder" />
+        <observer name="donmo_refund_order" instance="Donmo\Roundup\Observer\RefundDonationWithOrder" />
     </event>
 
 </config>

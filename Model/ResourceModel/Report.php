@@ -4,7 +4,7 @@ namespace Donmo\Roundup\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class DonmoReport extends AbstractDb
+class Report extends AbstractDb
 {
 
     protected function _construct()

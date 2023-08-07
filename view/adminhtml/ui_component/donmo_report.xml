@@ -43,7 +43,7 @@
                     <item name="config" xsi:type="array">
                         <item name="applied" xsi:type="array">
                             <item name="mode" xsi:type="string">live</item>
-                            <item name="status" xsi:type="string">SENT</item>
+                            <item name="status" xsi:type="string">CONFIRMED</item>
                         </item>
                     </item>
                 </argument>
