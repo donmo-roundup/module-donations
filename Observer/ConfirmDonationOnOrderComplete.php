@@ -2,35 +2,27 @@
 
 namespace Donmo\Roundup\Observer;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-
-use Donmo\Roundup\Model\Donmo\DonationFactory;
-use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
-use Donmo\Roundup\Model\Donmo\ResourceModel\Donation as DonationResource;
-
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Donmo\Roundup\Logger\Logger;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Sales\Model\Order;
+use Donmo\Roundup\Api\DonationManagementInterface;
+use Donmo\Roundup\Api\DonationRepositoryInterface;
 
 class ConfirmDonationOnOrderComplete implements ObserverInterface
 {
-    private DonationResource $donationResource;
     private Logger $logger;
-    private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId;
-
+    private DonationManagementInterface $donationManagement;
+    private DonationRepositoryInterface $donationRepository;
     public function __construct(
         Logger $logger,
-        DonationFactory  $donationFactory,
-        DonationResource $donationResource,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+        DonationManagementInterface $donationManagement,
+        DonationRepositoryInterface $donationRepository
     ) {
         $this->logger = $logger;
-        $this->donationFactory = $donationFactory;
-        $this->donationResource = $donationResource;
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->donationManagement = $donationManagement;
+        $this->donationRepository = $donationRepository;
     }
-
 
     public function execute(Observer $observer): void
     {
@@ -41,22 +33,11 @@ class ConfirmDonationOnOrderComplete implements ObserverInterface
             /* @var float $donationAmount */
             $donationAmount = $order->getData('donmodonation');
 
-            if ($order->getState() == 'complete') {
-                if ($donationAmount > 0) {
-                    $orderId = $order->getId();
-                    $quoteId = $order->getQuoteId();
-                    $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
+            if ($order->getState() == 'complete' and $donationAmount) {
+                $donation = $this->donationManagement->getByOrder($order);
 
-                    $donationModel = $this->donationFactory->create();
-
-                    $this->donationResource->load($donationModel, $maskedId, 'masked_quote_id');
-
-                    $donationModel
-                        ->setStatus(DonationModel::STATUS_CONFIRMED)
-                        ->setOrderId($orderId);
-                    $this->donationResource->save($donationModel);
-                }
-
+                $donation->setStatus(DonationManagementInterface::STATUS_CONFIRMED);
+                $this->donationRepository->save($donation);
             }
         } catch (\Exception $exception) {
             $this->logger->error("Donmo ConfirmDonationOnOrderComplete Observer error:\n" . $exception);
