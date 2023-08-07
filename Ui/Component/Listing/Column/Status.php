@@ -2,8 +2,8 @@
 
 namespace Donmo\Roundup\Ui\Component\Listing\Column;
 
+use Donmo\Roundup\Api\DonationManagementInterface;
 use Magento\Framework\Data\OptionSourceInterface;
-use Donmo\Roundup\Model\Donmo\Donation as DonationModel;
 
 class Status implements OptionSourceInterface
 {
@@ -11,20 +11,20 @@ class Status implements OptionSourceInterface
 
     public function toOptionArray(): array
     {
-        $this->options[DonationModel::STATUS_PENDING]['label'] = DonationModel::STATUS_PENDING;
-        $this->options[DonationModel::STATUS_PENDING]['value'] = DonationModel::STATUS_PENDING;
+        $this->options[DonationManagementInterface::STATUS_PENDING]['label'] = DonationManagementInterface::STATUS_PENDING;
+        $this->options[DonationManagementInterface::STATUS_PENDING]['value'] = DonationManagementInterface::STATUS_PENDING;
 
-        $this->options[DonationModel::STATUS_CONFIRMED]['label'] = DonationModel::STATUS_CONFIRMED;
-        $this->options[DonationModel::STATUS_CONFIRMED]['value'] = DonationModel::STATUS_CONFIRMED;
+        $this->options[DonationManagementInterface::STATUS_CONFIRMED]['label'] = DonationManagementInterface::STATUS_CONFIRMED;
+        $this->options[DonationManagementInterface::STATUS_CONFIRMED]['value'] = DonationManagementInterface::STATUS_CONFIRMED;
 
-        $this->options[DonationModel::STATUS_DELETED]['label'] = DonationModel::STATUS_DELETED;
-        $this->options[DonationModel::STATUS_DELETED]['value'] = DonationModel::STATUS_DELETED;
+        $this->options[DonationManagementInterface::STATUS_CANCELED]['label'] = DonationManagementInterface::STATUS_CANCELED;
+        $this->options[DonationManagementInterface::STATUS_CANCELED]['value'] = DonationManagementInterface::STATUS_CANCELED;
 
-        $this->options[DonationModel::STATUS_REFUNDED]['label'] = DonationModel::STATUS_REFUNDED;
-        $this->options[DonationModel::STATUS_REFUNDED]['value'] = DonationModel::STATUS_REFUNDED;
+        $this->options[DonationManagementInterface::STATUS_REFUNDED]['label'] = DonationManagementInterface::STATUS_REFUNDED;
+        $this->options[DonationManagementInterface::STATUS_REFUNDED]['value'] = DonationManagementInterface::STATUS_REFUNDED;
 
-        $this->options[DonationModel::STATUS_SENT]['label'] = DonationModel::STATUS_SENT;
-        $this->options[DonationModel::STATUS_SENT]['value'] = DonationModel::STATUS_SENT;
+        $this->options[DonationManagementInterface::STATUS_SENT]['label'] = DonationManagementInterface::STATUS_SENT;
+        $this->options[DonationManagementInterface::STATUS_SENT]['value'] = DonationManagementInterface::STATUS_SENT;
 
         return $this->options;
     }
