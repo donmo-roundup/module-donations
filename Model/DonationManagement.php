@@ -13,6 +13,11 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Sales\Model\Order;
 use Donmo\Roundup\Model\ResourceModel\Donation as DonationResourceModel;
 
+
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+
 class DonationManagement implements DonationManagementInterface
 {
     private Logger $logger;
@@ -20,15 +25,23 @@ class DonationManagement implements DonationManagementInterface
     private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId;
     private DonmoConfig $donmoConfig;
     private DonationRepositoryInterface $donationRepository;
-
     private DonationResourceModel $donationResource;
+
+    private CartRepositoryInterface $cartRepository;
+    private SerializerInterface $serializer;
+    private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId;
+
     public function __construct(
         Logger $logger,
         DonationInterfaceFactory        $donationFactory,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
         DonmoConfig                     $donmoConfig,
         DonationRepositoryInterface     $donationRepository,
-        DonationResourceModel $donationResource
+        DonationResourceModel $donationResource,
+        CartRepositoryInterface $cartRepository,
+        SerializerInterface $serializer,
+        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+
     ) {
         $this->logger = $logger;
         $this->donationFactory = $donationFactory;
@@ -36,6 +49,9 @@ class DonationManagement implements DonationManagementInterface
         $this->donmoConfig = $donmoConfig;
         $this->donationRepository = $donationRepository;
         $this->donationResource = $donationResource;
+        $this->cartRepository = $cartRepository;
+        $this->serializer = $serializer;
+        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
     }
 
     /**
@@ -79,5 +95,51 @@ class DonationManagement implements DonationManagementInterface
         }
 
         return $entity;
+    }
+
+    // REST API Services
+
+    public function addDonationToQuote(string $cartId, float $donationAmount): string
+    {
+        try {
+            $quoteId = $this->maskedQuoteIdToQuoteId->execute($cartId);
+            $quote = $this->cartRepository->get($quoteId);
+
+            if ($donationAmount > 0) {
+                $quote->setDonmodonation($donationAmount)->collectTotals();
+                $this->cartRepository->save($quote);
+
+                return $this->serializer->serialize(['message' => 'Success']);
+            } else {
+                return $this->serializer->serialize(['message' => 'Invalid donation']);
+            }
+        } catch (NoSuchEntityException) {
+            return $this->serializer->serialize(["message" => "The quote could not be loaded"]);
+        } catch (\Exception $e) {
+            return $this->serializer->serialize(["message" => "An error has occurred: " . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Remove donation from quote
+
+     * @param string $cartId
+     * @return string
+     */
+    public function removeDonationFromQuote(string $cartId): string
+    {
+        try {
+            $quoteId = $this->maskedQuoteIdToQuoteId->execute($cartId);
+            $quote = $this->cartRepository->get($quoteId);
+
+            $quote->setDonmodonation(0)->collectTotals();
+            $this->cartRepository->save($quote);
+
+            return $this->serializer->serialize(['message' => 'Success']);
+        } catch (NoSuchEntityException) {
+            return $this->serializer->serialize(["message" => "The quote could not be loaded"]);
+        } catch (\Exception $e) {
+            return $this->serializer->serialize(["message" => "An error has occurred: " . $e->getMessage()]);
+        }
     }
 }

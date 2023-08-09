@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Webapi/etc/webapi.xsd">
+
+    <route url="/V1/donmo/add_donation" method="POST">
+        <service class="Donmo\Roundup\Api\DonationManagementInterface" method="addDonationToQuote"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/donmo/remove_donation/:cartId" method="DELETE">
+        <service class="Donmo\Roundup\Api\DonationManagementInterface" method="removeDonationFromQuote"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>
