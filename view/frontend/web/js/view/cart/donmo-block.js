@@ -13,7 +13,8 @@ define([
 
         grandTotal: ko.observable(quote.totals()['grand_total']),
         addDonation:  ({ donationAmount }) => {
-            const path = url.build('donmo/roundup/create');
+            const cartId = quote.getQuoteId();
+            const path = url.build(`rest/V1/donmo/add_donation`)
 
             fetch(path, {
                 method: 'POST',
@@ -22,7 +23,8 @@ define([
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    amount: donationAmount
+                    donationAmount,
+                    cartId
                 })
             }).then(response => {
                 if(!response.ok) {
@@ -32,7 +34,8 @@ define([
             }).then(() => getTotalsAction())
         },
         removeDonation: () => {
-            const path = url.build('donmo/roundup/remove');
+            const cartId = quote.getQuoteId();
+            const path = url.build(`rest/V1/donmo/remove_donation/${cartId}`)
 
             return fetch(path, {
                 method: 'DELETE',
