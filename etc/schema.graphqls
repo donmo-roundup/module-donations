@@ -5,9 +5,14 @@ type CartPrices  @doc(description: "Contains details about the final price of it
 }
 
 type Mutation {
-    addDonationToQuote(cartId: String!, donationAmount: Float!): DonmoDonationOutput @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\AddDonationToQuote") @doc(description:"Add Donmo donation to quote")
+    addDonationToCart(input: AddDonationToCartInput): DonmoDonationOutput @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\AddDonationToCart") @doc(description:"Add Donmo donation to cart")
 
-    removeDonationFromQuote(cartId: String!): DonmoDonationOutput @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\RemoveDonationFromQuote") @doc(description:"Remove Donmo donation from quote")
+    removeDonationFromCart(cart_id: String!): DonmoDonationOutput @resolver(class: "\\Donmo\\Roundup\\Model\\Resolver\\RemoveDonationFromCart") @doc(description:"Remove Donmo donation from cart")
+}
+
+input AddDonationToCartInput @doc(description: "Specifies the coupon code to apply to the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    donation_amount: Float! @doc(description: "Donation amount.")
 }
 
 type DonmoDonationOutput {
