@@ -3,9 +3,11 @@ define([
     'ko',
     'Magento_Checkout/js/model/totals',
     'Magento_Checkout/js/model/quote',
-    'mage/url',
-    'Magento_Checkout/js/action/get-payment-information'
-], function (Component, ko, totals, quote, url, getTotalsAction) {
+    'Magento_Customer/js/model/customer',
+    'Magento_Checkout/js/model/url-builder',
+    'Magento_Checkout/js/action/get-payment-information',
+    'mage/storage'
+], function (Component, ko, totals, quote, customer, urlBuilder, getPaymentInformation, storage) {
     return Component.extend({
         defaults: {
             template: 'Donmo_Roundup/checkout/summary/donmo-block',
@@ -15,42 +17,35 @@ define([
 
         addDonation:  ({ donationAmount }) => {
             const cartId = quote.getQuoteId();
-            const path = url.build(`rest/V1/donmo/add_donation`)
+            let serviceUrl
+            if (!customer.isLoggedIn()) {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/add_donmo_donation', { cartId });
+            } else {
+                serviceUrl = urlBuilder.createUrl('/carts/mine/add_donmo_donation', {});
+            }
 
-            fetch(path, {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    donationAmount,
-                    cartId
-                })
-            }).then(response => {
-                if(!response.ok) {
-                    throw new Error();
-                }
-                return response.json()
-            }).then(() => getTotalsAction())
+            const payload = {
+                cartId,
+                donationAmount
+            };
+
+            return storage.post(
+                serviceUrl,
+                JSON.stringify(payload)
+            ).then(() => getPaymentInformation())
         },
 
         removeDonation: () => {
-            const cartId = quote.getQuoteId();
-            const path = url.build(`rest/V1/donmo/remove_donation/${cartId}`)
+            let serviceUrl
+            if (!customer.isLoggedIn()) {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/remove_donmo_donation', {
+                    cartId: quote.getQuoteId()
+                });
+            } else {
+                serviceUrl = urlBuilder.createUrl('/carts/mine/remove_donmo_donation', {});
+            }
 
-            return fetch(path, {
-                method: 'DELETE',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            }).then(response => {
-                if(! response.ok) {
-                    throw new Error();
-                }
-                return response.json()
-            }).then(
-                () => getTotalsAction())
+            return storage.delete(serviceUrl).then(() => getPaymentInformation())
         },
 
         insertIntegration: function (){

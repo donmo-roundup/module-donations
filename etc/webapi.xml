@@ -1,17 +1,37 @@
 <?xml version="1.0" ?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Webapi/etc/webapi.xsd">
 
-    <route url="/V1/donmo/add_donation" method="POST">
-        <service class="Donmo\Roundup\Api\DonationManagementInterface" method="addDonationToQuote"/>
+    <route url="V1/guest-carts/:cartId/add_donmo_donation" method="POST">
+        <service class="Donmo\Roundup\Api\GuestCartDonationManagementInterface" method="addDonationToCart"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
     </route>
 
-    <route url="/V1/donmo/remove_donation/:cartId" method="DELETE">
-        <service class="Donmo\Roundup\Api\DonationManagementInterface" method="removeDonationFromQuote"/>
+    <route url="/V1/guest-carts/:cartId/remove_donmo_donation" method="DELETE">
+        <service class="Donmo\Roundup\Api\GuestCartDonationManagementInterface" method="removeDonationFromCart"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
+    </route>
+
+    <route url="/V1/carts/mine/add_donmo_donation" method="POST">
+        <service class="Donmo\Roundup\Api\CartDonationManagementInterface" method="addDonationToCart"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
+    <route url="/V1/carts/mine/remove_donmo_donation" method="DELETE">
+        <service class="Donmo\Roundup\Api\CartDonationManagementInterface" method="removeDonationFromCart"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 </routes>

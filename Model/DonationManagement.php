@@ -99,7 +99,7 @@ class DonationManagement implements DonationManagementInterface
 
     // REST API Services
 
-    public function addDonationToQuote(string $cartId, float $donationAmount): string
+    public function addDonationToCart(string $cartId, float $donationAmount): string
     {
         try {
             $quoteId = $this->maskedQuoteIdToQuoteId->execute($cartId);
@@ -126,7 +126,7 @@ class DonationManagement implements DonationManagementInterface
      * @param string $cartId
      * @return string
      */
-    public function removeDonationFromQuote(string $cartId): string
+    public function removeDonationFromCart(string $cartId): string
     {
         try {
             $quoteId = $this->maskedQuoteIdToQuoteId->execute($cartId);
@@ -142,4 +142,5 @@ class DonationManagement implements DonationManagementInterface
             return $this->serializer->serialize(["message" => "An error has occurred: " . $e->getMessage()]);
         }
     }
+
 }

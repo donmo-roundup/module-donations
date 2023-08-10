@@ -28,24 +28,4 @@ interface DonationManagementInterface
      * @return DonationInterface
      */
     public function getByOrder(Order $order): DonationInterface;
-
-    // Rest API services
-
-    /**
-     * Add Donmo donation to quote
-     *
-     * @param string $cartId (masked quote ID)
-     * @param float $donationAmount
-     * @return string
-     */
-    public function addDonationToQuote(string $cartId, float $donationAmount): string;
-
-    /**
-    * Remove Donmo donation from quote
-    *
-    * @api
-    * @param string $cartId (masked quote ID)
-    * @return string
-    */
-    public function removeDonationFromQuote(string $cartId) : string;
 }

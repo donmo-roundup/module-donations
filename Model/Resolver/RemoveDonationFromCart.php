@@ -8,33 +8,33 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
-class RemoveDonationFromQuote implements ResolverInterface
+class RemoveDonationFromCart implements ResolverInterface
 {
     private Logger $logger;
     private CartRepositoryInterface $cartRepository;
-    private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId;
+    private GetCartForUser $getCartForUser;
 
     public function __construct(
         Logger $logger,
         CartRepositoryInterface $cartRepository,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
+        GetCartForUser $getCartForUser,
     ) {
         $this->logger = $logger;
         $this->cartRepository = $cartRepository;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
+        $this->getCartForUser = $getCartForUser;
     }
-
 
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): array
     {
-        $maskedId = $args['cartId'];
-        $quoteId = $this->maskedQuoteIdToQuoteId->execute($maskedId);
-        $quote = $this->cartRepository->get($quoteId);
+        $maskedCartId = $args['cart_id'];
+        $currentUserId = $context->getUserId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
 
-        $quote->setDonmodonation(0)->collectTotals();
-        $this->cartRepository->save($quote);
+        $cart->setDonmodonation(0)->collectTotals();
+        $this->cartRepository->save($cart);
 
         return ['message' => 'success'];
     }
