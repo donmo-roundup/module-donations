@@ -1,8 +1,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Donmo\Roundup\Api\Data\DonationInterface" type="Donmo\Roundup\Model\Donation" />
-    <preference for="Donmo\Roundup\Api\DonationManagementInterface" type="Donmo\Roundup\Model\DonationManagement" />
     <preference for="Donmo\Roundup\Api\DonationRepositoryInterface" type="Donmo\Roundup\Model\DonationRepository" />
     <preference for="Donmo\Roundup\Api\Data\DonationSearchResultsInterface" type="Donmo\Roundup\Model\DonationSearchResults" />
+    <preference for="Donmo\Roundup\Api\DonationManagementInterface" type="Donmo\Roundup\Model\DonationManagement" />
+    <preference for="Donmo\Roundup\Api\CartDonationManagementInterface" type="Donmo\Roundup\Model\CartDonationManagement" />
+    <preference for="Donmo\Roundup\Api\GuestCartDonationManagementInterface" type="Donmo\Roundup\Model\GuestCartDonationManagement" />
 
     <!--   Reports Table Grid Collection and DataProvider-->
 
