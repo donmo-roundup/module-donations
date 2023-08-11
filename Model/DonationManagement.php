@@ -41,7 +41,6 @@ class DonationManagement implements DonationManagementInterface
         CartRepositoryInterface $cartRepository,
         SerializerInterface $serializer,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-
     ) {
         $this->logger = $logger;
         $this->donationFactory = $donationFactory;
@@ -142,5 +141,4 @@ class DonationManagement implements DonationManagementInterface
             return $this->serializer->serialize(["message" => "An error has occurred: " . $e->getMessage()]);
         }
     }
-
 }
