@@ -12,8 +12,7 @@ class CartDonationManagement implements CartDonationManagementInterface
     public function __construct(
         CartRepositoryInterface $cartRepository,
         SerializerInterface $serializer,
-    )
-    {
+    ) {
         $this->cartRepository = $cartRepository;
         $this->serializer = $serializer;
     }

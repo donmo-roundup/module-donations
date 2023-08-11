@@ -6,6 +6,7 @@ use Donmo\Roundup\Api\GuestCartDonationManagementInterface;
 use Donmo\Roundup\Logger\Logger;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Donmo\Roundup\Api\CartDonationManagementInterface;
+
 class GuestCartDonationManagement implements GuestCartDonationManagementInterface
 {
     private Logger $logger;
@@ -16,8 +17,7 @@ class GuestCartDonationManagement implements GuestCartDonationManagementInterfac
         Logger $logger,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CartDonationManagementInterface $cartDonationManagement
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartDonationManagement = $cartDonationManagement;

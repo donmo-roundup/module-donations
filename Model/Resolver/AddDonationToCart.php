@@ -11,7 +11,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
-
 class AddDonationToCart implements ResolverInterface
 {
     private Logger $logger;
