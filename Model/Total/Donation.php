@@ -29,7 +29,7 @@ class Donation extends AbstractTotal
         Quote $quote,
         ShippingAssignmentInterface $shippingAssignment,
         Total $total
-    ): static {
+    ) {
         parent::collect($quote, $shippingAssignment, $total);
         if (!count($shippingAssignment->getItems())) {
             return $this;
