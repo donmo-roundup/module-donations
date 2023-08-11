@@ -20,7 +20,7 @@ class ApiService
     public function __construct(
         ZendClientFactory $httpClientFactory,
         Logger $logger,
-        DonmoConfig $donmoConfig,
+        DonmoConfig $donmoConfig
     ) {
         $this->client = $httpClientFactory->create();
         $this->logger = $logger;

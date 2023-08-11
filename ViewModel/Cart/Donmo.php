@@ -3,34 +3,24 @@
 namespace Donmo\Roundup\ViewModel\Cart;
 
 use Donmo\Roundup\Model\Config as DonmoConfig;
-use Magento\Framework\App\State;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class Donmo implements ArgumentInterface
 {
-    private State $appState;
     private mixed $mode;
     private DonmoConfig $donmoConfig;
     private Json $json;
-    public function __construct(State $appState, DonmoConfig $donmoConfig, Json $json)
+    public function __construct(DonmoConfig $donmoConfig, Json $json)
     {
-        $this->appState = $appState;
         $this->donmoConfig = $donmoConfig;
         $this->mode = $this->donmoConfig->getCurrentMode();
         $this->json = $json;
     }
 
-    public function getIsAvailable()
+    public function getIsActive(): bool
     {
-        $isActive = $this->donmoConfig->getIsActive();
-
-        $modesCompatible =
-            $this->appState->getMode() == State::MODE_PRODUCTION && $this->mode == 'live'
-            ||
-            $this->appState->getMode() == State::MODE_DEVELOPER && $this->mode == 'test';
-
-        return ($isActive && $modesCompatible);
+         return $this->donmoConfig->getIsActive();
     }
 
     public function getDonmoConfig(): string

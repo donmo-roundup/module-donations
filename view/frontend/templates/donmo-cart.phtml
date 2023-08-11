@@ -7,14 +7,14 @@ use Magento\Framework\View\Element\Template;
 use Donmo\Roundup\Model\Config;
 
 $viewModel = $block->getViewModel();
-$isAvailable = $viewModel->getIsAvailable();
+$isActive = $viewModel->getIsActive();
 $donmoConfig = $viewModel->getDonmoConfig();
 $style = "
 width: 70%;
 margin: 15px 5px;
 "
 ?>
-<?php if ($isAvailable):?>
+<?php if ($isActive):?>
 <div id="donmo-component" style="<?= $style ?>" data-bind="scope:'donmo-component'">
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
