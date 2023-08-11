@@ -112,7 +112,7 @@ class DonationManagement implements DonationManagementInterface
             } else {
                 return $this->serializer->serialize(['message' => 'Invalid donation']);
             }
-        } catch (NoSuchEntityException) {
+        } catch (NoSuchEntityException $e) {
             return $this->serializer->serialize(["message" => "The quote could not be loaded"]);
         } catch (\Exception $e) {
             return $this->serializer->serialize(["message" => "An error has occurred: " . $e->getMessage()]);
@@ -135,7 +135,7 @@ class DonationManagement implements DonationManagementInterface
             $this->cartRepository->save($quote);
 
             return $this->serializer->serialize(['message' => 'Success']);
-        } catch (NoSuchEntityException) {
+        } catch (NoSuchEntityException $e) {
             return $this->serializer->serialize(["message" => "The quote could not be loaded"]);
         } catch (\Exception $e) {
             return $this->serializer->serialize(["message" => "An error has occurred: " . $e->getMessage()]);

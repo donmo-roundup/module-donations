@@ -19,7 +19,7 @@ class RemoveDonationFromCart implements ResolverInterface
     public function __construct(
         Logger $logger,
         CartRepositoryInterface $cartRepository,
-        GetCartForUser $getCartForUser,
+        GetCartForUser $getCartForUser
     ) {
         $this->logger = $logger;
         $this->cartRepository = $cartRepository;

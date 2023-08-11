@@ -11,14 +11,14 @@ class CartDonationManagement implements CartDonationManagementInterface
 {
     public function __construct(
         CartRepositoryInterface $cartRepository,
-        SerializerInterface $serializer,
+        SerializerInterface $serializer
     ) {
         $this->cartRepository = $cartRepository;
         $this->serializer = $serializer;
     }
 
     /**
-     @inheritdoc
+    @inheritdoc
      */
     public function addDonationToCart(int $cartId, float $donationAmount): string
     {
@@ -33,7 +33,7 @@ class CartDonationManagement implements CartDonationManagementInterface
             } else {
                 return $this->serializer->serialize(['message' => 'Invalid donation']);
             }
-        } catch (NoSuchEntityException) {
+        } catch (NoSuchEntityException $e) {
             throw new NoSuchEntityException(__('The quote could not be loaded'));
         } catch (\Exception $e) {
             throw new \Exception('Some error has occurred');
@@ -52,7 +52,7 @@ class CartDonationManagement implements CartDonationManagementInterface
             $this->cartRepository->save($quote);
 
             return $this->serializer->serialize(['message' => 'Success']);
-        } catch (NoSuchEntityException) {
+        } catch (NoSuchEntityException $e) {
             throw new NoSuchEntityException(__('The quote could not be loaded'));
         } catch (\Exception $e) {
             throw new \Exception('Some error has occurred');
