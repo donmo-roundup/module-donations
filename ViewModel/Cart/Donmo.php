@@ -8,7 +8,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class Donmo implements ArgumentInterface
 {
-    private mixed $mode;
+    private string $mode;
     private DonmoConfig $donmoConfig;
     private Json $json;
     public function __construct(DonmoConfig $donmoConfig, Json $json)
@@ -20,7 +20,7 @@ class Donmo implements ArgumentInterface
 
     public function getIsActive(): bool
     {
-         return $this->donmoConfig->getIsActive();
+        return $this->donmoConfig->getIsActive();
     }
 
     public function getDonmoConfig(): string
