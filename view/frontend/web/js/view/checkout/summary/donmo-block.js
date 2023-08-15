@@ -25,7 +25,6 @@ define([
             }
 
             const payload = {
-                cartId,
                 donationAmount
             };
 
@@ -53,6 +52,7 @@ define([
                 {
                     publicKey: this.donmoConfig.publicKey,
                     isBackendBased: true,
+                    elementId: 'donmo-roundup',
                     language: this.donmoConfig.language,
                     orderId: quote.getQuoteId(),
                     integrationTitle: this.donmoConfig.integrationTitle,
