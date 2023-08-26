@@ -66,10 +66,8 @@ class ApiService
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
 
         $response = curl_exec($ch);
-        $this->logger->info('response is' . $response);
 
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->logger->info('status is' . $status);
 
         if ($status == 200) {
             $this->logger->info("Donmo CreateAndConfirmDonations API Request Successful: \n" . $response);
