@@ -63,7 +63,7 @@ class DonationRepository implements DonationRepositoryInterface
         }
         $entity = $this->donationFactory->create();
         $this->donationResource->load($entity, $id);
-        if (!$entity->getEntityId()) {
+        if (!$entity->getDonationId()) {
             throw new NoSuchEntityException(__("The requested donation does not exist."));
         }
         return $entity;
