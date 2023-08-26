@@ -7,22 +7,15 @@ use Donmo\Roundup\lib\Donmo as Donmo;
 use Donmo\Roundup\Logger\Logger;
 use Donmo\Roundup\Model\Config as DonmoConfig;
 
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
-use Zend_Http_Client;
-
 class ApiService
 {
-    private ZendClient $client;
     private Logger $logger;
     private DonmoConfig $donmoConfig;
 
     public function __construct(
-        ZendClientFactory $httpClientFactory,
         Logger $logger,
         DonmoConfig $donmoConfig
     ) {
-        $this->client = $httpClientFactory->create();
         $this->logger = $logger;
         $this->donmoConfig = $donmoConfig;
     }
@@ -48,50 +41,70 @@ class ApiService
      * @param $mode
      * @param DonationInterface[] $donations
      * @return int
-     * @throws \Zend_Http_Client_Exception
      */
     public function createAndConfirmDonations($mode, array $donations): int
     {
         $sk = $this->donmoConfig->getSecretKey($mode);
 
         $url = Donmo::$apiBase . '/donations/confirm';
-        $this->client->setUri($url);
-        $this->client->setMethod(Zend_Http_Client::POST);
-        $this->client->setHeaders('sk', $sk);
+
+        $ch = curl_init();
+        $headers = array(
+            'Content-Type: application/json',
+            "sk: $sk"
+        );
 
         $payload = $this->generatePayload($donations);
+        $body = json_encode(['donations' => $payload]);
 
-        $json = json_encode(['donations' => $payload]);
+        curl_setopt($ch, CURLOPT_URL, $url); // URL to request
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+        curl_setopt($ch, CURLOPT_POST, true); // Set the request method to POST
 
-        $result = $this->client->setRawData($json, 'application/json')->request();
 
-        $status = $result->getStatus();
-        $body = $result->getBody();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+        $response = curl_exec($ch);
+        $this->logger->info('response is' . $response);
+
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $this->logger->info('status is' . $status);
 
         if ($status == 200) {
-            $this->logger->info("Donmo CreateAndConfirmDonations API Request Successful: \n" . $body);
+            $this->logger->info("Donmo CreateAndConfirmDonations API Request Successful: \n" . $response);
         } else {
-            $this->logger->error("Unsuccessful Donmo CreateAndConfirmDonations API Request: \n" . $body);
+            $this->logger->error("Unsuccessful Donmo CreateAndConfirmDonations API Request: \n" . $response);
         }
 
         return $status;
     }
     public function deleteDonation($donationMode, $id): int
     {
-            $sk = $this->donmoConfig->getSecretKey($donationMode);
+        $sk = $this->donmoConfig->getSecretKey($donationMode);
 
-            $url = Donmo::$apiBase . "/donations/{$id}";
-            $this->client->setUri($url);
-            $this->client->setMethod(Zend_Http_Client::DELETE);
-            $this->client->setHeaders('sk', $sk);
+        $url = Donmo::$apiBase . "/donations/{$id}";
 
-            $result = $this->client->request();
-            $status = $result->getStatus();
-            $body = $result->getBody();
+        $ch = curl_init();
+        $headers = array(
+            'Content-Type: application/json',
+            "sk: $sk"
+        );
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $response = curl_exec($ch);
+
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
         if ($status == 200) {
-            $this->logger->info("Donmo DeleteDonation API Request Successful: \n" . $body);
+            $this->logger->info("Donmo DeleteDonation API Request Successful: \n" . $response);
         } else {
-            $this->logger->error("Unsuccessful Delete Donation API request: \n" . $body);
+            $this->logger->error("Unsuccessful Delete Donation API request: \n" . $response);
         }
 
             return $status;
