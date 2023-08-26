@@ -1,4 +1,4 @@
-        {
+{
     "name": "donmo-roundup/module-donations",
     "type": "magento2-module",
     "keywords": [
@@ -12,7 +12,8 @@
     "homepage": "https://www.donmo.org",
     "description": "Donmo Roundup Magento Plugin for collecting donations for Ukraine on the payment page",
     "require": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "ext-curl": "*"
     },
 
     "autoload": {
