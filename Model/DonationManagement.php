@@ -89,7 +89,7 @@ class DonationManagement implements DonationManagementInterface
 
         $this->donationResource->load($entity, $orderId, DonationInterface::ORDER_ID);
 
-        if (!$entity->getEntityId()) {
+        if (!$entity->getDonationId()) {
             throw new NoSuchEntityException(__("The requested donation does not exist."));
         }
 
