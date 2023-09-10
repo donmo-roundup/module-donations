@@ -54,6 +54,7 @@ define([
                     isBackendBased: true,
                     elementId: 'donmo-roundup',
                     language: this.donmoConfig.language,
+                    currency: this.donmoConfig.currency,
                     orderId: quote.getQuoteId(),
                     integrationTitle: this.donmoConfig.integrationTitle,
                     roundupMessage: this.donmoConfig.roundupMessage,
