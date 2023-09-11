@@ -31,7 +31,8 @@ class ApiService
             $payload[] = [
                 'donationAmount' => $donation->getDonationAmount(),
                 'createdAt' => $donation->getCreatedAt(),
-                'orderId' => $donation->getMaskedQuoteId()
+                'orderId' => $donation->getMaskedQuoteId(),
+                'currency' => $donation->getCurrency()
             ];
         }
         return $payload;
@@ -46,13 +47,13 @@ class ApiService
     {
         $sk = $this->donmoConfig->getSecretKey($mode);
 
-        $url = Donmo::$apiBase . '/donations/confirm';
+        $url = Donmo::$apiBase . '/donations';
 
         $ch = curl_init();
-        $headers = array(
+        $headers = [
             'Content-Type: application/json',
             "sk: $sk"
-        );
+        ];
 
         $payload = $this->generatePayload($donations);
         $body = json_encode(['donations' => $payload]);
@@ -84,10 +85,10 @@ class ApiService
         $url = Donmo::$apiBase . "/donations/{$id}";
 
         $ch = curl_init();
-        $headers = array(
+        $headers = [
             'Content-Type: application/json',
             "sk: $sk"
-        );
+        ];
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');

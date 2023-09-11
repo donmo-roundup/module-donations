@@ -28,7 +28,6 @@ class GuestCartDonationManagement implements GuestCartDonationManagementInterfac
      */
     public function addDonationToCart(string $cartId, float $donationAmount): string
     {
-        $this->logger->info('addDonationToCart guest');
         return $this->cartDonationManagement->addDonationToCart($this->maskedQuoteIdToQuoteId->execute($cartId), $donationAmount);
     }
 

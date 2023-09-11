@@ -4,6 +4,7 @@ namespace Donmo\Roundup\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Config
 {
@@ -17,16 +18,21 @@ class Config
 
     private ScopeConfigInterface $scopeConfig;
     private LocaleResolver $localeResolver;
+    private StoreManagerInterface $storeManager;
 
     /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, LocaleResolver $localeResolver)
-    {
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        LocaleResolver $localeResolver,
+        StoreManagerInterface $storeManager
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->localeResolver = $localeResolver;
+        $this->storeManager = $storeManager;
     }
 
     public function getCurrentMode(): string
@@ -78,5 +84,10 @@ class Config
         $currentLocaleCode = $this->localeResolver->getLocale(); // uk_UA
         $languageCode = strstr($currentLocaleCode, '_', true);
         return $languageCode;
+    }
+
+    public function getCurrencyCode() : string
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
     }
 }
