@@ -13,6 +13,7 @@ interface DonationInterface
      */
     const DONATION_ID = 'donation_id';
     const DONATION_AMOUNT = 'donation_amount';
+    const DONATION_CURRENCY = 'currency';
     const STATUS = 'status';
     const MODE = 'mode';
     const MASKED_QUOTE_ID = 'masked_quote_id';
@@ -49,6 +50,21 @@ interface DonationInterface
      * @return $this
      */
     public function setDonationAmount(float $donationAmount);
+
+    /**
+     * Get Donation Currency
+     *
+     * @return string
+     */
+    public function getCurrency(): string;
+
+    /**
+     * Set Donation Currency
+     *
+     * @param string $currency
+     * @return $this
+     */
+    public function setCurrency($currency);
 
     /**
      * Get Status

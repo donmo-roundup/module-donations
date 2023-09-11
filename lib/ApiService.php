@@ -31,7 +31,8 @@ class ApiService
             $payload[] = [
                 'donationAmount' => $donation->getDonationAmount(),
                 'createdAt' => $donation->getCreatedAt(),
-                'orderId' => $donation->getMaskedQuoteId()
+                'orderId' => $donation->getMaskedQuoteId(),
+                'currency' => $donation->getCurrency()
             ];
         }
         return $payload;
@@ -46,7 +47,7 @@ class ApiService
     {
         $sk = $this->donmoConfig->getSecretKey($mode);
 
-        $url = Donmo::$apiBase . '/donations/confirm';
+        $url = Donmo::$apiBase . '/donations';
 
         $ch = curl_init();
         $headers = [

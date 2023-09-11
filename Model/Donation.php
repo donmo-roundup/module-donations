@@ -57,6 +57,27 @@ class Donation extends AbstractModel implements DonationInterface
     }
 
     /**
+     * Get Currency
+     *
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->getData(self::DONATION_CURRENCY);
+    }
+
+    /**
+     * Set Status
+     *
+     * @param string $currency
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        return $this->setData(self::DONATION_CURRENCY, $currency);
+    }
+
+    /**
      * Get Status
      *
      * @return string

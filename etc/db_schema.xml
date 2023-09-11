@@ -11,6 +11,8 @@
         <column xsi:type="decimal" name="donation_amount"  scale="2" precision="20" unsigned="false"
                 comment="Donation Amount"/>
 
+        <column xsi:type="varchar" name="currency" length="3" comment="Donation Currency"/>
+
         <column xsi:type="varchar" name="status" length="32" default="PENDING" comment="Status"/>
 
         <column xsi:type="varchar" name="mode" length="32" comment="Mode"/>

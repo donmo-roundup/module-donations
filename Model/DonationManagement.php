@@ -65,6 +65,7 @@ class DonationManagement implements DonationManagementInterface
         $quoteId = $order->getQuoteId();
         $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
         $currentMode = $this->donmoConfig->getCurrentMode();
+        $currency = $order->getOrderCurrency()->getCurrencyCode();
 
         if ($donationAmount) {
             $donation = $this->donationFactory->create();
@@ -72,6 +73,7 @@ class DonationManagement implements DonationManagementInterface
                 ->setOrderId($orderId)
                 ->setMaskedQuoteId($maskedId)
                 ->setDonationAmount($donationAmount)
+                ->setCurrency($currency)
                 ->setMode($currentMode)
                 ->setStatus(self::STATUS_PENDING);
 
